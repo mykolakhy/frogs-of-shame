@@ -1,0 +1,69 @@
+[
+  {
+    "id": "ancient-cursed",
+    "title": "Ancient Cursed Frog of Shame",
+    "file": "ancient_cursed_frog_of_shame.png",
+    "description": "A dark cursed relic frog with runes, graveyard mood, and ancient green horror styling.",
+    "tags": [
+      "ancient",
+      "cursed",
+      "green",
+      "runes",
+      "graveyard",
+      "horror",
+      "dark",
+      "mystic",
+      "shame"
+    ]
+  },
+  {
+    "id": "bronze",
+    "title": "Bronze Frog of Shame",
+    "file": "bronze_frog_of_shame.png",
+    "description": "A bronze-toned shame frog perched in a damp forest scene with metallic fantasy styling.",
+    "tags": [
+      "bronze",
+      "metal",
+      "gold",
+      "forest",
+      "fantasy",
+      "classic",
+      "wet",
+      "shame"
+    ]
+  },
+  {
+    "id": "cosmic",
+    "title": "Cosmic Frog of Shame",
+    "file": "cosmic_frog_of_shame.png",
+    "description": "A purple galaxy frog with planets, stars, nebula texture, and cosmic existential drama.",
+    "tags": [
+      "cosmic",
+      "space",
+      "galaxy",
+      "purple",
+      "stars",
+      "planets",
+      "nebula",
+      "universe",
+      "shame"
+    ]
+  },
+  {
+    "id": "nuclear-slime",
+    "title": "Nuclear Slime Frog of Shame",
+    "file": "nuclear_frog_of_shame.png",
+    "description": "A bright radioactive slime frog with neon green sludge, hazard signs, and toxic energy.",
+    "tags": [
+      "nuclear",
+      "radioactive",
+      "slime",
+      "toxic",
+      "neon",
+      "green",
+      "hazard",
+      "glowing",
+      "shame"
+    ]
+  }
+]
