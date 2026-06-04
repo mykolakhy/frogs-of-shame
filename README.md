@@ -1,8 +1,8 @@
-# Frogs of Shame
+# They Are Frogs
 
 A small image bank for searchable, downloadable frog images. It is built as a static site, so it can be hosted on GitHub Pages, Netlify, Vercel, S3, or any static file host.
 
-Live site: <https://mykolakhy.github.io/frogs-of-shame/>
+Live site: <https://mykolakhy.github.io/they-are-frogs/>
 
 ## Run Locally
 
@@ -23,7 +23,7 @@ A local server is recommended because browsers usually block `fetch("./assets/fr
 ## Project Structure
 
 ```text
-frog-shame-bank/
+they-are-frogs/
   index.html
   styles.css
   script.js
@@ -47,10 +47,10 @@ Example entry:
 ```json
 {
   "id": "example-frog",
-  "title": "Example Frog of Shame",
-  "file": "example_frog_of_shame.png",
+  "title": "Example Frog",
+  "file": "example_frog.png",
   "description": "Short human-readable description shown on the card.",
-  "tags": ["example", "green", "funny", "shame"]
+  "tags": ["example", "green", "funny"]
 }
 ```
 
