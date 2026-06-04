@@ -1,6 +1,13 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
+    <!-- Cloudflare Web Analytics -->
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "f37fba84dbd1440f99ad55938826f5f4"}'
+    ></script>
+    <!-- End Cloudflare Web Analytics -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>They Are Frogs</title>
@@ -17,7 +24,10 @@
       <section class="search-panel" aria-labelledby="search-title">
         <div>
           <h2 id="search-title">Find a frog</h2>
-          <p>Search by name, color, mood, material, theme, or any tag in the catalog.</p>
+          <p>
+            Search by name, color, mood, material, theme, or any tag in the
+            catalog.
+          </p>
         </div>
         <label class="search-box">
           <span>Search frogs</span>
@@ -35,7 +45,11 @@
         <button id="clearSearch" type="button">Clear</button>
       </section>
 
-      <section id="frogGrid" class="frog-grid" aria-label="Frog image results"></section>
+      <section
+        id="frogGrid"
+        class="frog-grid"
+        aria-label="Frog image results"
+      ></section>
 
       <section id="emptyState" class="empty-state" hidden>
         <h2>No frogs found</h2>
@@ -62,3 +76,6 @@
     <script src="./script.js" type="module"></script>
   </body>
 </html>
+
+
+
