@@ -2,6 +2,8 @@
 
 A small image bank for searchable, downloadable frog images. It is built as a static site, so it can be hosted on GitHub Pages, Netlify, Vercel, S3, or any static file host.
 
+Live site: <https://mykolakhy.github.io/frogs-of-shame/>
+
 ## Run Locally
 
 From this folder:
@@ -28,17 +30,17 @@ frog-shame-bank/
   assets/
     frogs.json
     frogs/
-      ancient_cursed_frog_of_shame.png
-      bronze_frog_of_shame.png
-      cosmic_frog_of_shame.png
-      nuclear_frog_of_shame.png
+      *.png
 ```
+
+The searchable catalog lives in `assets/frogs.json`; image files live in `assets/frogs/`.
 
 ## Add Another Frog
 
 1. Put the new image file in `assets/frogs/`.
 2. Add a new entry to `assets/frogs.json`.
-3. Restart the local server if needed and refresh the browser.
+3. Run the site locally and confirm the frog appears in search results.
+4. Open a pull request against `main`.
 
 Example entry:
 
@@ -62,6 +64,10 @@ Use tags for words people may search by:
 - objects or themes: `runes`, `planets`, `radioactive`, `slime`
 
 Search matches title, description, filename, and tags.
+
+## Contributing
+
+Changes should go through pull requests. The `main` branch is protected and requires code-owner review before merge.
 
 ## License
 
