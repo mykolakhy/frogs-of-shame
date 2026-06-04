@@ -1,8 +1,8 @@
 [
   {
     "id": "ancient-cursed",
-    "title": "Ancient Cursed Frog of Shame",
-    "file": "ancient_cursed_frog_of_shame.png",
+    "title": "Ancient Cursed Frog",
+    "file": "ancient_cursed_frog.png",
     "description": "A dark cursed relic frog with runes, graveyard mood, and ancient green horror styling.",
     "tags": [
       "ancient",
@@ -12,15 +12,14 @@
       "graveyard",
       "horror",
       "dark",
-      "mystic",
-      "shame"
+      "mystic"
     ]
   },
   {
     "id": "bronze",
-    "title": "Bronze Frog of Shame",
-    "file": "bronze_frog_of_shame.png",
-    "description": "A bronze-toned shame frog perched in a damp forest scene with metallic fantasy styling.",
+    "title": "Bronze Frog",
+    "file": "bronze_frog.png",
+    "description": "A bronze-toned frog perched in a damp forest scene with metallic fantasy styling.",
     "tags": [
       "bronze",
       "metal",
@@ -28,14 +27,13 @@
       "forest",
       "fantasy",
       "classic",
-      "wet",
-      "shame"
+      "wet"
     ]
   },
   {
     "id": "cosmic",
-    "title": "Cosmic Frog of Shame",
-    "file": "cosmic_frog_of_shame.png",
+    "title": "Cosmic Frog",
+    "file": "cosmic_frog.png",
     "description": "A purple galaxy frog with planets, stars, nebula texture, and cosmic existential drama.",
     "tags": [
       "cosmic",
@@ -45,14 +43,13 @@
       "stars",
       "planets",
       "nebula",
-      "universe",
-      "shame"
+      "universe"
     ]
   },
   {
     "id": "nuclear-slime",
-    "title": "Nuclear Slime Frog of Shame",
-    "file": "nuclear_frog_of_shame.png",
+    "title": "Nuclear Slime Frog",
+    "file": "nuclear_frog.png",
     "description": "A bright radioactive slime frog with neon green sludge, hazard signs, and toxic energy.",
     "tags": [
       "nuclear",
@@ -62,15 +59,14 @@
       "neon",
       "green",
       "hazard",
-      "glowing",
-      "shame"
+      "glowing"
     ]
   },
   {
     "id": "bureaucratic",
-    "title": "Bureaucratic Frog of Shame",
-    "file": "bureaucratic_frog_of_shame.png",
-    "description": "A paperwork-heavy frog with office bureaucracy energy, forms, stamps, and procedural shame.",
+    "title": "Bureaucratic Frog",
+    "file": "bureaucratic_frog.png",
+    "description": "A paperwork-heavy frog with office bureaucracy energy, forms, stamps, and procedural drama.",
     "tags": [
       "bureaucratic",
       "bureaucracy",
@@ -78,15 +74,14 @@
       "paperwork",
       "forms",
       "stamps",
-      "administration",
-      "shame"
+      "administration"
     ]
   },
   {
     "id": "critical-thinking",
-    "title": "Critical Thinking Frog of Shame",
-    "file": "critical_thinking_frog_of_shame.png",
-    "description": "A reasoning-focused frog for logic, skepticism, analysis, and intellectual shame.",
+    "title": "Critical Thinking Frog",
+    "file": "critical_thinking_frog.png",
+    "description": "A reasoning-focused frog for logic, skepticism, analysis, and intellectual drama.",
     "tags": [
       "critical",
       "thinking",
@@ -94,15 +89,14 @@
       "reasoning",
       "analysis",
       "skeptic",
-      "smart",
-      "shame"
+      "smart"
     ]
   },
   {
     "id": "goblin",
-    "title": "Goblin Frog of Shame",
-    "file": "goblin_frog_of_shame.png",
-    "description": "A fantasy goblin-styled frog with mischievous, chaotic, dungeon-like shame.",
+    "title": "Goblin Frog",
+    "file": "goblin_frog.png",
+    "description": "A fantasy goblin-styled frog with mischievous, chaotic, dungeon-like energy.",
     "tags": [
       "goblin",
       "fantasy",
@@ -110,15 +104,14 @@
       "chaos",
       "mischief",
       "dungeon",
-      "creature",
-      "shame"
+      "creature"
     ]
   },
   {
     "id": "microwave-dinner",
-    "title": "Microwave Dinner Frog of Shame",
-    "file": "microwave_dinner_frog_of_shame.png",
-    "description": "A convenience-food frog with microwave dinner, frozen meal, and late-night shame themes.",
+    "title": "Microwave Dinner Frog",
+    "file": "microwave_dinner_frog.png",
+    "description": "A convenience-food frog with microwave dinner, frozen meal, and late-night themes.",
     "tags": [
       "microwave",
       "dinner",
@@ -126,15 +119,14 @@
       "frozen",
       "meal",
       "kitchen",
-      "snack",
-      "shame"
+      "snack"
     ]
   },
   {
     "id": "nasa",
-    "title": "NASA Frog of Shame",
-    "file": "nasa_frog_of_shame.png",
-    "description": "A space-agency frog with NASA, astronaut, mission control, and orbital shame themes.",
+    "title": "NASA Frog",
+    "file": "nasa_frog.png",
+    "description": "A space-agency frog with NASA, astronaut, mission control, and orbital themes.",
     "tags": [
       "nasa",
       "space",
@@ -142,15 +134,14 @@
       "mission",
       "rocket",
       "orbit",
-      "science",
-      "shame"
+      "science"
     ]
   },
   {
     "id": "obsidian",
-    "title": "Obsidian Frog of Shame",
-    "file": "obsidian_frog_of_shame.png",
-    "description": "A dark volcanic glass frog with black stone, sharp edges, and ominous shame.",
+    "title": "Obsidian Frog",
+    "file": "obsidian_frog.png",
+    "description": "A dark volcanic glass frog with black stone, sharp edges, and ominous styling.",
     "tags": [
       "obsidian",
       "black",
@@ -158,29 +149,27 @@
       "volcanic",
       "dark",
       "glass",
-      "ominous",
-      "shame"
+      "ominous"
     ]
   },
   {
     "id": "original",
-    "title": "Original Frog of Shame",
-    "file": "original_frog_of_shame.png",
-    "description": "The original frog variant for classic shame posts and baseline frog comparisons.",
+    "title": "Original Frog",
+    "file": "original_frog.png",
+    "description": "The original frog variant for classic posts and baseline frog comparisons.",
     "tags": [
       "original",
       "classic",
       "baseline",
       "frog",
-      "meme",
-      "shame"
+      "meme"
     ]
   },
   {
     "id": "platinum",
-    "title": "Platinum Frog of Shame",
-    "file": "platinum_frog_of_shame.png",
-    "description": "A premium silver-white metallic frog with platinum shine and luxury shame styling.",
+    "title": "Platinum Frog",
+    "file": "platinum_frog.png",
+    "description": "A premium silver-white metallic frog with platinum shine and luxury styling.",
     "tags": [
       "platinum",
       "silver",
@@ -188,15 +177,14 @@
       "luxury",
       "premium",
       "shine",
-      "white",
-      "shame"
+      "white"
     ]
   },
   {
     "id": "shiny-rainbow",
-    "title": "Shiny Rainbow Frog of Shame",
-    "file": "shyny_rainbow_frog_of_shame.png",
-    "description": "A colorful shiny rainbow frog with bright, multicolor, celebratory shame energy.",
+    "title": "Shiny Rainbow Frog",
+    "file": "shyny_rainbow_frog.png",
+    "description": "A colorful shiny rainbow frog with bright, multicolor, celebratory energy.",
     "tags": [
       "shiny",
       "shyny",
@@ -204,15 +192,14 @@
       "colorful",
       "multicolor",
       "bright",
-      "sparkle",
-      "shame"
+      "sparkle"
     ]
   },
   {
     "id": "wifi-router",
-    "title": "WiFi Router Frog of Shame",
-    "file": "wifi_router_frog_of_shame.png",
-    "description": "A network-themed frog with WiFi router, internet, signal, and connectivity shame.",
+    "title": "WiFi Router Frog",
+    "file": "wifi_router_frog.png",
+    "description": "A network-themed frog with WiFi router, internet, signal, and connectivity themes.",
     "tags": [
       "wifi",
       "wi-fi",
@@ -220,8 +207,7 @@
       "internet",
       "network",
       "signal",
-      "technology",
-      "shame"
+      "technology"
     ]
   }
 ]
