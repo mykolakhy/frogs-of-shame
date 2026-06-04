@@ -65,5 +65,163 @@
       "glowing",
       "shame"
     ]
+  },
+  {
+    "id": "bureaucratic",
+    "title": "Bureaucratic Frog of Shame",
+    "file": "bureaucratic_frog_of_shame.png",
+    "description": "A paperwork-heavy frog with office bureaucracy energy, forms, stamps, and procedural shame.",
+    "tags": [
+      "bureaucratic",
+      "bureaucracy",
+      "office",
+      "paperwork",
+      "forms",
+      "stamps",
+      "administration",
+      "shame"
+    ]
+  },
+  {
+    "id": "critical-thinking",
+    "title": "Critical Thinking Frog of Shame",
+    "file": "critical_thinking_frog_of_shame.png",
+    "description": "A reasoning-focused frog for logic, skepticism, analysis, and intellectual shame.",
+    "tags": [
+      "critical",
+      "thinking",
+      "logic",
+      "reasoning",
+      "analysis",
+      "skeptic",
+      "smart",
+      "shame"
+    ]
+  },
+  {
+    "id": "goblin",
+    "title": "Goblin Frog of Shame",
+    "file": "goblin_frog_of_shame.png",
+    "description": "A fantasy goblin-styled frog with mischievous, chaotic, dungeon-like shame.",
+    "tags": [
+      "goblin",
+      "fantasy",
+      "green",
+      "chaos",
+      "mischief",
+      "dungeon",
+      "creature",
+      "shame"
+    ]
+  },
+  {
+    "id": "microwave-dinner",
+    "title": "Microwave Dinner Frog of Shame",
+    "file": "microwave_dinner_frog_of_shame.png",
+    "description": "A convenience-food frog with microwave dinner, frozen meal, and late-night shame themes.",
+    "tags": [
+      "microwave",
+      "dinner",
+      "food",
+      "frozen",
+      "meal",
+      "kitchen",
+      "snack",
+      "shame"
+    ]
+  },
+  {
+    "id": "nasa",
+    "title": "NASA Frog of Shame",
+    "file": "nasa_frog_of_shame.png",
+    "description": "A space-agency frog with NASA, astronaut, mission control, and orbital shame themes.",
+    "tags": [
+      "nasa",
+      "space",
+      "astronaut",
+      "mission",
+      "rocket",
+      "orbit",
+      "science",
+      "shame"
+    ]
+  },
+  {
+    "id": "obsidian",
+    "title": "Obsidian Frog of Shame",
+    "file": "obsidian_frog_of_shame.png",
+    "description": "A dark volcanic glass frog with black stone, sharp edges, and ominous shame.",
+    "tags": [
+      "obsidian",
+      "black",
+      "stone",
+      "volcanic",
+      "dark",
+      "glass",
+      "ominous",
+      "shame"
+    ]
+  },
+  {
+    "id": "original",
+    "title": "Original Frog of Shame",
+    "file": "original_frog_of_shame.png",
+    "description": "The original frog variant for classic shame posts and baseline frog comparisons.",
+    "tags": [
+      "original",
+      "classic",
+      "baseline",
+      "frog",
+      "meme",
+      "shame"
+    ]
+  },
+  {
+    "id": "platinum",
+    "title": "Platinum Frog of Shame",
+    "file": "platinum_frog_of_shame.png",
+    "description": "A premium silver-white metallic frog with platinum shine and luxury shame styling.",
+    "tags": [
+      "platinum",
+      "silver",
+      "metal",
+      "luxury",
+      "premium",
+      "shine",
+      "white",
+      "shame"
+    ]
+  },
+  {
+    "id": "shiny-rainbow",
+    "title": "Shiny Rainbow Frog of Shame",
+    "file": "shyny_rainbow_frog_of_shame.png",
+    "description": "A colorful shiny rainbow frog with bright, multicolor, celebratory shame energy.",
+    "tags": [
+      "shiny",
+      "shyny",
+      "rainbow",
+      "colorful",
+      "multicolor",
+      "bright",
+      "sparkle",
+      "shame"
+    ]
+  },
+  {
+    "id": "wifi-router",
+    "title": "WiFi Router Frog of Shame",
+    "file": "wifi_router_frog_of_shame.png",
+    "description": "A network-themed frog with WiFi router, internet, signal, and connectivity shame.",
+    "tags": [
+      "wifi",
+      "wi-fi",
+      "router",
+      "internet",
+      "network",
+      "signal",
+      "technology",
+      "shame"
+    ]
   }
 ]
