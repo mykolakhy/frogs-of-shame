@@ -1,1 +1,371 @@
-[]
+[
+    {
+        "id":  "ancient-cursed",
+        "title":  "Ancient Cursed Frog",
+        "file":  "ancient_cursed_frog.png",
+        "description":  "A dark cursed relic frog with runes, graveyard mood, and ancient green horror styling.",
+        "tags":  [
+                     "ancient",
+                     "cursed",
+                     "green",
+                     "runes",
+                     "graveyard",
+                     "horror",
+                     "dark",
+                     "mystic"
+                 ]
+    },
+    {
+        "id":  "biblically-accurate",
+        "title":  "Biblically Accurate Frog",
+        "file":  "biblically_accurate_frog.png",
+        "description":  "A surreal celestial frog with radiant eyes, sacred geometry, and otherworldly intensity.",
+        "tags":  [
+                     "biblical",
+                     "accurate",
+                     "celestial",
+                     "surreal",
+                     "eyes",
+                     "sacred",
+                     "radiant",
+                     "divine"
+                 ]
+    },
+    {
+        "id":  "bronze",
+        "title":  "Bronze Frog",
+        "file":  "bronze_frog.png",
+        "description":  "A bronze-toned frog perched in a damp forest scene with metallic fantasy styling.",
+        "tags":  [
+                     "bronze",
+                     "metal",
+                     "gold",
+                     "forest",
+                     "fantasy",
+                     "classic",
+                     "wet"
+                 ]
+    },
+    {
+        "id":  "bureaucratic",
+        "title":  "Bureaucratic Frog",
+        "file":  "bureaucratic_frog.png",
+        "description":  "A paperwork-heavy frog with office bureaucracy energy, forms, stamps, and procedural drama.",
+        "tags":  [
+                     "bureaucratic",
+                     "bureaucracy",
+                     "office",
+                     "paperwork",
+                     "forms",
+                     "stamps",
+                     "administration"
+                 ]
+    },
+    {
+        "id":  "cosmic",
+        "title":  "Cosmic Frog",
+        "file":  "cosmic_frog.png",
+        "description":  "A purple galaxy frog with planets, stars, nebula texture, and cosmic existential drama.",
+        "tags":  [
+                     "cosmic",
+                     "space",
+                     "galaxy",
+                     "purple",
+                     "stars",
+                     "planets",
+                     "nebula",
+                     "universe"
+                 ]
+    },
+    {
+        "id":  "critical-thinking",
+        "title":  "Critical Thinking Frog",
+        "file":  "critical_thinking_frog.png",
+        "description":  "A reasoning-focused frog for logic, skepticism, analysis, and intellectual drama.",
+        "tags":  [
+                     "critical",
+                     "thinking",
+                     "logic",
+                     "reasoning",
+                     "analysis",
+                     "skeptic",
+                     "smart"
+                 ]
+    },
+    {
+        "id":  "eldritch",
+        "title":  "Eldritch Frog",
+        "file":  "eldritch_frog.png",
+        "description":  "A cosmic horror frog with unsettling ancient energy and impossible occult atmosphere.",
+        "tags":  [
+                     "eldritch",
+                     "horror",
+                     "cosmic",
+                     "ancient",
+                     "occult",
+                     "weird",
+                     "dark",
+                     "monster"
+                 ]
+    },
+    {
+        "id":  "emotional-support",
+        "title":  "Emotional Support Frog",
+        "file":  "emotional_support_frog.png",
+        "description":  "A comforting support frog with warm, gentle energy for encouragement and reassurance.",
+        "tags":  [
+                     "emotional",
+                     "support",
+                     "comfort",
+                     "gentle",
+                     "warm",
+                     "kind",
+                     "reassuring"
+                 ]
+    },
+    {
+        "id":  "expired-coupon",
+        "title":  "Expired Coupon Frog",
+        "file":  "expired_coupon_frog.png",
+        "description":  "A discount-themed frog with expired coupon energy, retail disappointment, and bargain-bin drama.",
+        "tags":  [
+                     "expired",
+                     "coupon",
+                     "discount",
+                     "retail",
+                     "shopping",
+                     "paper",
+                     "deal",
+                     "bargain"
+                 ]
+    },
+    {
+        "id":  "final-boss",
+        "title":  "Final Boss Frog",
+        "file":  "final_boss_frog.png",
+        "description":  "A dramatic boss-battle frog with intimidating game energy and climactic fantasy styling.",
+        "tags":  [
+                     "final",
+                     "boss",
+                     "game",
+                     "battle",
+                     "dramatic",
+                     "fantasy",
+                     "powerful",
+                     "epic"
+                 ]
+    },
+    {
+        "id":  "fluorescent-orange",
+        "title":  "Fluorescent Orange Frog",
+        "file":  "fluorescent_orange_frog.png",
+        "description":  "A bright fluorescent orange frog with high-visibility color and loud neon presence.",
+        "tags":  [
+                     "fluorescent",
+                     "orange",
+                     "neon",
+                     "bright",
+                     "colorful",
+                     "glowing",
+                     "vivid"
+                 ]
+    },
+    {
+        "id":  "goblin",
+        "title":  "Goblin Frog",
+        "file":  "goblin_frog.png",
+        "description":  "A fantasy-styled frog with mischievous, chaotic, dungeon-like energy.",
+        "tags":  [
+                     "goblin",
+                     "fantasy",
+                     "green",
+                     "chaos",
+                     "mischief",
+                     "dungeon",
+                     "creature"
+                 ]
+    },
+    {
+        "id":  "invisible",
+        "title":  "Invisible Frog",
+        "file":  "invisible_frog.png",
+        "description":  "A nearly unseen frog built around transparency, absence, and subtle visual trickery.",
+        "tags":  [
+                     "invisible",
+                     "transparent",
+                     "hidden",
+                     "absence",
+                     "subtle",
+                     "mystery",
+                     "stealth"
+                 ]
+    },
+    {
+        "id":  "microwave-dinner",
+        "title":  "Microwave Dinner Frog",
+        "file":  "microwave_dinner_frog.png",
+        "description":  "A convenience-food frog with microwave dinner, frozen meal, and late-night themes.",
+        "tags":  [
+                     "microwave",
+                     "dinner",
+                     "food",
+                     "frozen",
+                     "meal",
+                     "kitchen",
+                     "snack"
+                 ]
+    },
+    {
+        "id":  "moldy-bread",
+        "title":  "Moldy Bread Frog",
+        "file":  "moldy_bread_frog.png",
+        "description":  "A stale pantry frog with moldy bread texture, green fuzz, and forgotten-kitchen energy.",
+        "tags":  [
+                     "moldy",
+                     "bread",
+                     "food",
+                     "stale",
+                     "green",
+                     "kitchen",
+                     "pantry",
+                     "fuzzy"
+                 ]
+    },
+    {
+        "id":  "nasa",
+        "title":  "NASA Frog",
+        "file":  "nasa_frog.png",
+        "description":  "A space-agency frog with NASA, astronaut, mission control, and orbital themes.",
+        "tags":  [
+                     "nasa",
+                     "space",
+                     "astronaut",
+                     "mission",
+                     "rocket",
+                     "orbit",
+                     "science"
+                 ]
+    },
+    {
+        "id":  "nuclear-slime",
+        "title":  "Nuclear Slime Frog",
+        "file":  "nuclear_slime_frog.png",
+        "description":  "A bright radioactive slime frog with neon green sludge, hazard signs, and toxic energy.",
+        "tags":  [
+                     "nuclear",
+                     "radioactive",
+                     "slime",
+                     "toxic",
+                     "neon",
+                     "green",
+                     "hazard",
+                     "glowing"
+                 ]
+    },
+    {
+        "id":  "obsidian",
+        "title":  "Obsidian Frog",
+        "file":  "obsidian_frog.png",
+        "description":  "A dark volcanic glass frog with black stone, sharp edges, and ominous styling.",
+        "tags":  [
+                     "obsidian",
+                     "black",
+                     "stone",
+                     "volcanic",
+                     "dark",
+                     "glass",
+                     "ominous"
+                 ]
+    },
+    {
+        "id":  "platinum",
+        "title":  "Platinum Frog",
+        "file":  "platinum_frog.png",
+        "description":  "A premium silver-white metallic frog with platinum shine and luxury styling.",
+        "tags":  [
+                     "platinum",
+                     "silver",
+                     "metal",
+                     "luxury",
+                     "premium",
+                     "shine",
+                     "white"
+                 ]
+    },
+    {
+        "id":  "premium-subscription",
+        "title":  "Premium Subscription Frog",
+        "file":  "premium_subscription_frog.png",
+        "description":  "A paid-tier frog with premium subscription polish, upgrade energy, and glossy app-store drama.",
+        "tags":  [
+                     "premium",
+                     "subscription",
+                     "upgrade",
+                     "app",
+                     "paid",
+                     "glossy",
+                     "luxury"
+                 ]
+    },
+    {
+        "id":  "regular",
+        "title":  "Regular Frog",
+        "file":  "regular_frog.png",
+        "description":  "A straightforward everyday frog for classic posts, simple reactions, and baseline comparisons.",
+        "tags":  [
+                     "regular",
+                     "classic",
+                     "baseline",
+                     "frog",
+                     "simple",
+                     "everyday"
+                 ]
+    },
+    {
+        "id":  "rusty-iron",
+        "title":  "Rusty Iron Frog",
+        "file":  "rusty_iron_frog.png",
+        "description":  "A corroded metal frog with rusty iron texture, industrial grit, and weathered orange-brown tones.",
+        "tags":  [
+                     "rusty",
+                     "iron",
+                     "metal",
+                     "corroded",
+                     "industrial",
+                     "weathered",
+                     "orange",
+                     "brown"
+                 ]
+    },
+    {
+        "id":  "tax-evasion",
+        "title":  "Tax Evasion Frog",
+        "file":  "tax_evasion_frog.png",
+        "description":  "A finance-themed frog with suspicious paperwork, tax forms, and legal-adjacent accounting energy.",
+        "tags":  [
+                     "tax",
+                     "evasion",
+                     "finance",
+                     "paperwork",
+                     "money",
+                     "forms",
+                     "accounting",
+                     "suspicious"
+                 ]
+    },
+    {
+        "id":  "wifi-router",
+        "title":  "WiFi Router Frog",
+        "file":  "wifi_router_frog.png",
+        "description":  "A network-themed frog with WiFi router, internet, signal, and connectivity themes.",
+        "tags":  [
+                     "wifi",
+                     "wi-fi",
+                     "router",
+                     "internet",
+                     "network",
+                     "signal",
+                     "technology"
+                 ]
+    }
+]
