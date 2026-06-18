@@ -93,6 +93,38 @@
                  ]
     },
     {
+        "id":  "crystal-clear",
+        "title":  "Crystal Clear Frog",
+        "file":  "crystal_clear_frog.png",
+        "description":  "A transparent crystal frog with glassy clarity, refracted light, and clean mineral shine.",
+        "tags":  [
+                     "crystal",
+                     "clear",
+                     "transparent",
+                     "glass",
+                     "mineral",
+                     "shine",
+                     "light",
+                     "gem"
+                 ]
+    },
+    {
+        "id":  "diamond-clear",
+        "title":  "Diamond Clear Frog",
+        "file":  "diamond_clear_frog.png",
+        "description":  "A diamond-like clear frog with faceted sparkle, gemstone brilliance, and icy luxury styling.",
+        "tags":  [
+                     "diamond",
+                     "clear",
+                     "transparent",
+                     "gem",
+                     "faceted",
+                     "sparkle",
+                     "luxury",
+                     "ice"
+                 ]
+    },
+    {
         "id":  "eldritch",
         "title":  "Eldritch Frog",
         "file":  "eldritch_frog.png",
@@ -106,6 +138,22 @@
                      "weird",
                      "dark",
                      "monster"
+                 ]
+    },
+    {
+        "id":  "emerald-green",
+        "title":  "Emerald Green Frog",
+        "file":  "emerald_green_frog.png",
+        "description":  "A vivid emerald green frog with gemstone richness, deep shine, and jewel-toned intensity.",
+        "tags":  [
+                     "emerald",
+                     "green",
+                     "gem",
+                     "jewel",
+                     "vivid",
+                     "shine",
+                     "luxury",
+                     "stone"
                  ]
     },
     {
@@ -156,6 +204,22 @@
                  ]
     },
     {
+        "id":  "fire-red",
+        "title":  "Fire Red Frog",
+        "file":  "fire_red_frog.png",
+        "description":  "A fiery red frog with hot flame color, intense energy, and dramatic molten warmth.",
+        "tags":  [
+                     "fire",
+                     "red",
+                     "flame",
+                     "hot",
+                     "molten",
+                     "intense",
+                     "bright",
+                     "warm"
+                 ]
+    },
+    {
         "id":  "fluorescent-orange",
         "title":  "Fluorescent Orange Frog",
         "file":  "fluorescent_orange_frog.png",
@@ -198,6 +262,22 @@
                      "subtle",
                      "mystery",
                      "stealth"
+                 ]
+    },
+    {
+        "id":  "leaf-green",
+        "title":  "Leaf Green Frog",
+        "file":  "leaf_green_frog.png",
+        "description":  "A fresh leaf green frog with natural plant color, garden mood, and springlike energy.",
+        "tags":  [
+                     "leaf",
+                     "green",
+                     "plant",
+                     "nature",
+                     "garden",
+                     "fresh",
+                     "spring",
+                     "natural"
                  ]
     },
     {
@@ -278,6 +358,22 @@
                  ]
     },
     {
+        "id":  "pearl-white",
+        "title":  "Pearl White Frog",
+        "file":  "pearl_white_frog.png",
+        "description":  "A pearl white frog with soft iridescent shine, smooth elegance, and pale luxury styling.",
+        "tags":  [
+                     "pearl",
+                     "white",
+                     "iridescent",
+                     "soft",
+                     "elegant",
+                     "luxury",
+                     "smooth",
+                     "shine"
+                 ]
+    },
+    {
         "id":  "platinum",
         "title":  "Platinum Frog",
         "file":  "platinum_frog.png",
@@ -290,6 +386,22 @@
                      "premium",
                      "shine",
                      "white"
+                 ]
+    },
+    {
+        "id":  "platinum-silver",
+        "title":  "Platinum Silver Frog",
+        "file":  "platinum_silver_frog.png",
+        "description":  "A platinum silver frog with polished metallic shine, premium finish, and cool reflective tones.",
+        "tags":  [
+                     "platinum",
+                     "silver",
+                     "metal",
+                     "metallic",
+                     "premium",
+                     "polished",
+                     "reflective",
+                     "cool"
                  ]
     },
     {
@@ -322,6 +434,22 @@
                  ]
     },
     {
+        "id":  "ruby-red",
+        "title":  "Ruby Red Frog",
+        "file":  "ruby_red_frog.png",
+        "description":  "A ruby red frog with gemstone color, rich crimson shine, and jewel-like drama.",
+        "tags":  [
+                     "ruby",
+                     "red",
+                     "gem",
+                     "jewel",
+                     "crimson",
+                     "shine",
+                     "luxury",
+                     "stone"
+                 ]
+    },
+    {
         "id":  "rusty-iron",
         "title":  "Rusty Iron Frog",
         "file":  "rusty_iron_frog.png",
@@ -335,6 +463,38 @@
                      "weathered",
                      "orange",
                      "brown"
+                 ]
+    },
+    {
+        "id":  "sapphire-blue",
+        "title":  "Sapphire Blue Frog",
+        "file":  "sapphire_blue_frog.png",
+        "description":  "A sapphire blue frog with deep jewel tones, polished shine, and cool gemstone presence.",
+        "tags":  [
+                     "sapphire",
+                     "blue",
+                     "gem",
+                     "jewel",
+                     "deep",
+                     "shine",
+                     "luxury",
+                     "stone"
+                 ]
+    },
+    {
+        "id":  "soul-silver",
+        "title":  "Soul Silver Frog",
+        "file":  "soul_silver_frog.png",
+        "description":  "A soul silver frog with spectral metallic tones, pale shimmer, and ethereal cool energy.",
+        "tags":  [
+                     "soul",
+                     "silver",
+                     "metal",
+                     "spectral",
+                     "ethereal",
+                     "shimmer",
+                     "cool",
+                     "pale"
                  ]
     },
     {
