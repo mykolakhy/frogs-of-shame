@@ -50,11 +50,15 @@ pipeline {
             WORKTREE_DIR=$(mktemp -d)
 
             # A prior failed run (e.g. a bad push) can abort before cleanup runs,
-            # leaving a stale local gh-pages branch and/or worktree behind that
-            # would otherwise block this run's `checkout --orphan`. Clear both
-            # unconditionally before starting — safe even when there's nothing
-            # to clean.
+            # leaving a stale worktree directory on disk that still has
+            # gh-pages checked out — `git worktree prune` alone won't touch it
+            # (the directory still exists), and git refuses to delete a branch
+            # that's checked out in any worktree. So first force-remove every
+            # worktree except the main one, *then* prune and delete the branch.
             trap 'git worktree remove "$WORKTREE_DIR" --force 2>/dev/null || true' EXIT
+            git worktree list --porcelain | awk "/^worktree /{print \\$2}" | tail -n +2 | while read -r wt; do
+              git worktree remove "$wt" --force 2>/dev/null || rm -rf "$wt"
+            done
             git worktree prune
             git branch -D "${GH_PAGES_BRANCH}" 2>/dev/null || true
 
