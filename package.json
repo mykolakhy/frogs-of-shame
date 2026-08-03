@@ -1,0 +1,17 @@
+{
+  "name": "frogs-of-shame",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "scripts/with-secrets.sh vite",
+    "build": "scripts/with-secrets.sh vite build",
+    "preview": "scripts/with-secrets.sh vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4"
+  },
+  "devDependencies": {
+    "vite": "^6.4.3"
+  }
+}
