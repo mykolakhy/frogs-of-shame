@@ -4,9 +4,26 @@ A small image bank for searchable, downloadable frog images. It is built as a st
 
 Live site: <https://mykolakhy.github.io/they-are-frogs/>
 
+## Secrets
+
+No `.env` files are used anywhere in this repo. Supabase credentials (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) live in a Bitwarden Secrets Manager (BWS) project and are fetched live at dev/build time via the `bws` CLI.
+
+One-time local setup (requires the [`bws` CLI](https://bitwarden.com/help/secrets-manager-cli/) installed, and a BWS access token + project ID from whoever administers the BWS project):
+
+```bash
+security add-generic-password -a "$USER" -s "THEY_ARE_FROGS_BWS_ACCESS_TOKEN" -w
+security add-generic-password -a "$USER" -s "THEY_ARE_FROGS_BWS_PROJECT_ID" -w
+```
+
+Each command prompts for a value — paste in your real BWS access token / project ID. These two pointers are stored in your local macOS Keychain; the actual Supabase secrets never touch disk.
+
+`npm run dev` / `build` / `preview` all go through [`scripts/with-secrets.sh`](scripts/with-secrets.sh), which reads those two Keychain entries and runs `bws run` to inject the real secrets into Vite's environment for that command only.
+
+On CI (Jenkins), the same two pointers come from Jenkins Credentials instead of Keychain — see [`Jenkinsfile`](Jenkinsfile).
+
 ## Run Locally
 
-From this folder:
+From this folder (after the one-time secrets setup above):
 
 ```bash
 npm install
@@ -31,6 +48,8 @@ they-are-frogs/
   script.js
   supabaseClient.js
   auth.js
+  scripts/
+    with-secrets.sh
   public/
     assets/
       frogs.json
@@ -39,6 +58,7 @@ they-are-frogs/
   supabase/
     migrations/
       0001_favorites.sql
+  Jenkinsfile
 ```
 
 The searchable catalog lives in `public/assets/frogs.json`; image files live in `public/assets/frogs/`. Files under `public/` are Vite's static passthrough directory, so they're served/copied unchanged in both dev and build (still reachable at `./assets/...` at runtime).

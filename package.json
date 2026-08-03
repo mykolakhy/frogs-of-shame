@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "scripts/with-secrets.sh vite",
+    "build": "scripts/with-secrets.sh vite build",
+    "preview": "scripts/with-secrets.sh vite preview"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4"

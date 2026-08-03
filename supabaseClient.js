@@ -8,6 +8,6 @@ export const supabase =
 
 if (!supabase) {
   console.warn(
-    "Supabase env vars missing (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) — auth and favorites are disabled. See .env.example.",
+    "Supabase env vars missing (VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY) — auth and favorites are disabled. Run via npm scripts (scripts/with-secrets.sh) so BWS secrets are injected. See README's Secrets section.",
   );
 }
