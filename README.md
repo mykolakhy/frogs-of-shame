@@ -9,16 +9,18 @@ Live site: <https://mykolakhy.github.io/they-are-frogs/>
 From this folder:
 
 ```bash
-python3 -m http.server 5173
+npm install
+npm run dev
 ```
 
-Open:
+Open the URL Vite prints (defaults to `http://localhost:5173`).
 
-```text
-http://localhost:5173
+To try a production build locally:
+
+```bash
+npm run build
+npm run preview
 ```
-
-A local server is recommended because browsers usually block `fetch("./assets/frogs.json")` when `index.html` is opened directly from the filesystem.
 
 ## Project Structure
 
@@ -27,18 +29,24 @@ they-are-frogs/
   index.html
   styles.css
   script.js
-  assets/
-    frogs.json
-    frogs/
-      *.png
+  supabaseClient.js
+  auth.js
+  public/
+    assets/
+      frogs.json
+      frogs/
+        *.png
+  supabase/
+    migrations/
+      0001_favorites.sql
 ```
 
-The searchable catalog lives in `assets/frogs.json`; image files live in `assets/frogs/`.
+The searchable catalog lives in `public/assets/frogs.json`; image files live in `public/assets/frogs/`. Files under `public/` are Vite's static passthrough directory, so they're served/copied unchanged in both dev and build (still reachable at `./assets/...` at runtime).
 
 ## Add Another Frog
 
-1. Put the new image file in `assets/frogs/`.
-2. Add a new entry to `assets/frogs.json`.
+1. Put the new image file in `public/assets/frogs/`.
+2. Add a new entry to `public/assets/frogs.json`.
 3. Run the site locally and confirm the frog appears in search results.
 4. Open a pull request against `main`.
 
