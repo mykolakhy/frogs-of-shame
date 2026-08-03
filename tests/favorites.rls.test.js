@@ -54,11 +54,12 @@ describe("favorites RLS policies", () => {
   });
 
   test("anonymous insert is rejected", async () => {
-    const { status } = await anon.post("/rest/v1/favorites", {
+    const { status, data } = await anon.post("/rest/v1/favorites", {
       user_id: "00000000-0000-0000-0000-000000000000",
       frog_id: testFrogId,
     });
-    expect(status).toBeGreaterThanOrEqual(400);
+    expect(status).toBe(401);
+    expect(data.code).toBe("42501"); // Postgres: RLS policy violation
   });
 
   test("authenticated user can insert and read their own favorite", async () => {
@@ -71,11 +72,12 @@ describe("favorites RLS policies", () => {
   });
 
   test("authenticated user cannot insert a favorite for another user_id", async () => {
-    const { status } = await authed.post("/rest/v1/favorites", {
+    const { status, data } = await authed.post("/rest/v1/favorites", {
       user_id: "00000000-0000-0000-0000-000000000000",
       frog_id: `${testFrogId}-other`,
     });
-    expect(status).toBeGreaterThanOrEqual(400);
+    expect(status).toBe(403);
+    expect(data.code).toBe("42501"); // Postgres: RLS policy violation
   });
 
   test("authenticated user can delete their own favorite", async () => {
