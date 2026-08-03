@@ -21,6 +21,8 @@ Each command prompts for a value — paste in your real BWS access token / proje
 
 On CI (Jenkins), the same two pointers come from Jenkins Credentials instead of Keychain — see [`Jenkinsfile`](Jenkinsfile).
 
+The `favorites` table's row-level-security policies are exercised by real HTTP calls against Supabase (see [Tests](#tests) below), which needs one more BWS secret pair: `TESTS_USER_EMAIL` and `TESTS_USER_PASS`, holding the credentials of a dedicated Supabase Auth user with a confirmed email (create it once via the Supabase dashboard, then add its email/password as those two secrets in the same BWS project). This account only ever touches its own `favorites` rows, so it needs no special privileges.
+
 ## Run Locally
 
 From this folder (after the one-time secrets setup above):
@@ -38,6 +40,14 @@ To try a production build locally:
 npm run build
 npm run preview
 ```
+
+## Tests
+
+```bash
+npm test
+```
+
+Runs [`tests/favorites.rls.test.js`](tests/favorites.rls.test.js) via Vitest — integration tests that hit the live Supabase REST API directly with axios (not `supabase-js`) to verify the `favorites` table's row-level-security policies actually hold: anonymous requests see/write nothing, and an authenticated user can only read, insert, and delete their own rows. Requires the `TEST_USER_EMAIL`/`TEST_USER_PASSWORD` BWS secrets described above; runs against the real project, so it creates and cleans up one throwaway `favorites` row per run.
 
 ## Project Structure
 
@@ -58,6 +68,8 @@ they-are-frogs/
   supabase/
     migrations/
       0001_favorites.sql
+  tests/
+    favorites.rls.test.js
   Jenkinsfile
 ```
 

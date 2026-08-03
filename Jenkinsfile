@@ -18,6 +18,19 @@ pipeline {
       }
     }
 
+    stage('Test') {
+      steps {
+        // Same BWS project as Build below also holds TEST_USER_EMAIL/TEST_USER_PASSWORD,
+        // so no extra Jenkins credentials are needed for this stage.
+        withCredentials([
+          string(credentialsId: 'THEY_ARE_FROGS_BWS_ACCESS_TOKEN', variable: 'BWS_ACCESS_TOKEN'),
+          string(credentialsId: 'THEY_ARE_FROGS_BWS_PROJECT_ID', variable: 'BWS_PROJECT_ID')
+        ]) {
+          sh 'bws run --project-id "$BWS_PROJECT_ID" -- npx vitest run'
+        }
+      }
+    }
+
     stage('Build') {
       steps {
         // Calls vite directly (not "npm run build") — that npm script goes through
