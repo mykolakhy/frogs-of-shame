@@ -49,6 +49,19 @@ pipeline {
             REPO_URL=$(git config --get remote.origin.url | sed -E "s#https://##")
             WORKTREE_DIR=$(mktemp -d)
 
+            # A prior failed run (e.g. a bad push) can abort before cleanup runs,
+            # leaving a stale worktree directory on disk that still has
+            # gh-pages checked out — `git worktree prune` alone won't touch it
+            # (the directory still exists), and git refuses to delete a branch
+            # that's checked out in any worktree. So first force-remove every
+            # worktree except the main one, *then* prune and delete the branch.
+            trap 'git worktree remove "$WORKTREE_DIR" --force 2>/dev/null || true' EXIT
+            git worktree list --porcelain | awk "/^worktree /{print \\$2}" | tail -n +2 | while read -r wt; do
+              git worktree remove "$wt" --force 2>/dev/null || rm -rf "$wt"
+            done
+            git worktree prune
+            git branch -D "${GH_PAGES_BRANCH}" 2>/dev/null || true
+
             git fetch origin "${GH_PAGES_BRANCH}" || true
 
             # Detached checkout either way: pushing "HEAD:${GH_PAGES_BRANCH}" below
@@ -65,19 +78,19 @@ pipeline {
             find "$WORKTREE_DIR" -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
             cp -r dist/. "$WORKTREE_DIR"/
 
-            cd "$WORKTREE_DIR"
-            git config user.name "jenkins-deploy"
-            git config user.email "jenkins-deploy@users.noreply.github.com"
-            git add -A
-            if ! git diff --cached --quiet; then
-              git commit -m "Deploy ${GIT_COMMIT}"
-              git push "https://${GH_USER}:${GH_TOKEN}@${REPO_URL}" "HEAD:${GH_PAGES_BRANCH}"
+            # Using `-C` throughout (never `cd`-ing into $WORKTREE_DIR) so this
+            # shell's cwd never ends up inside the worktree — `git worktree
+            # remove` in the trap above would otherwise fail to remove a
+            # directory the shell is currently standing in.
+            git -C "$WORKTREE_DIR" config user.name "jenkins-deploy"
+            git -C "$WORKTREE_DIR" config user.email "jenkins-deploy@users.noreply.github.com"
+            git -C "$WORKTREE_DIR" add -A
+            if ! git -C "$WORKTREE_DIR" diff --cached --quiet; then
+              git -C "$WORKTREE_DIR" commit -m "Deploy ${GIT_COMMIT}"
+              git -C "$WORKTREE_DIR" push "https://${GH_USER}:${GH_TOKEN}@${REPO_URL}" "HEAD:${GH_PAGES_BRANCH}"
             else
               echo "No changes to deploy"
             fi
-
-            cd - > /dev/null
-            git worktree remove "$WORKTREE_DIR" --force
           '''
         }
       }
