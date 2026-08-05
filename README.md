@@ -61,7 +61,12 @@ they-are-frogs/
   src/
     main.tsx
     auth/
+      AuthModal.tsx
+      AuthWidget.tsx
+      useSupabaseSession.ts
     frogs/
+      FrogWidget.tsx
+      useAuthSessionBridge.ts
   script.js             # legacy fallback; no longer loaded
   supabaseClient.js
   favorites.js
