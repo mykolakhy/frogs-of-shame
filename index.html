@@ -25,65 +25,9 @@
       <div id="auth-root"></div>
     </header>
 
-    <main>
-      <section class="search-panel" aria-labelledby="search-title">
-        <div>
-          <h2 id="search-title">Find a frog</h2>
-          <p>
-            Search by name, color, mood, material, theme, or any tag in the
-            catalog.
-          </p>
-        </div>
-        <label class="search-box">
-          <span>Search frogs</span>
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Try: cosmic, radioactive, bronze, cursed"
-            autocomplete="off"
-          />
-        </label>
-      </section>
-
-      <section class="toolbar" aria-live="polite">
-        <span id="resultCount">Loading frogs...</span>
-        <div class="toolbar-actions">
-          <button id="favoritesFilter" type="button" aria-pressed="false" disabled title="Log in to filter favorites">My Favorites</button>
-          <button id="clearSearch" type="button">Clear</button>
-        </div>
-      </section>
-
-      <section
-        id="frogGrid"
-        class="frog-grid"
-        aria-label="Frog image results"
-      ></section>
-
-      <section id="emptyState" class="empty-state" hidden>
-        <h2>No frogs found</h2>
-        <p>Try a broader search term or add another tag to the frog catalog.</p>
-      </section>
-    </main>
-
-    <template id="frogCardTemplate">
-      <article class="frog-card">
-        <a class="image-link" target="_blank" rel="noreferrer">
-          <img loading="lazy" alt="" />
-        </a>
-        <button class="favorite-toggle" type="button" aria-pressed="false"></button>
-        <div class="frog-card-body">
-          <div>
-            <h2></h2>
-            <p class="description"></p>
-          </div>
-          <ul class="tag-list" aria-label="Tags"></ul>
-          <a class="download-button" download>Download PNG</a>
-        </div>
-      </article>
-    </template>
+    <main id="frogs-root"></main>
 
     <script type="module" src="./src/main.tsx"></script>
-    <script src="./script.js" type="module"></script>
   </body>
 </html>
 

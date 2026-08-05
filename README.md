@@ -55,9 +55,16 @@ Runs [`tests/favorites.rls.test.js`](tests/favorites.rls.test.js) via Vitest —
 they-are-frogs/
   index.html
   styles.css
-  script.js
+  package.json
+  vite.config.ts
+  tsconfig.json
+  src/
+    main.tsx
+    auth/
+    frogs/
+  script.js             # legacy fallback; no longer loaded
   supabaseClient.js
-  auth.js
+  favorites.js
   scripts/
     with-secrets.sh
   public/
