@@ -14,8 +14,8 @@
     <link rel="icon" href="./assets/favicon-JuwA8Tkt.ico" sizes="any" />
     <link rel="icon" href="./assets/favicon-32.png" type="image/png" />
     <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
-    <script type="module" crossorigin src="./assets/index-Bl5cdBVv.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BA2Ol3vI.css">
+    <script type="module" crossorigin src="./assets/index-BebOT4Fq.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BiJheUjF.css">
   </head>
   <body>
     <header class="site-header">
@@ -23,87 +23,11 @@
         <h1>They Are Frogs</h1>
       </div>
 
-      <section id="authPanel" class="auth-panel" aria-label="Account">
-        <form id="authForm" class="auth-form">
-          <label class="auth-field">
-            <span>Email</span>
-            <input id="authEmail" type="email" autocomplete="email" required />
-          </label>
-          <label class="auth-field">
-            <span>Password</span>
-            <input id="authPassword" type="password" autocomplete="current-password" required minlength="6" />
-          </label>
-          <div class="auth-actions">
-            <button id="authLogIn" type="submit">Log in</button>
-            <button id="authSignUp" type="button">Sign up</button>
-          </div>
-          <p id="authMessage" class="auth-message" role="status" hidden></p>
-        </form>
-
-        <div id="authSession" class="auth-session" hidden>
-          <span id="authSessionEmail"></span>
-          <button id="authLogOut" type="button">Log out</button>
-        </div>
-      </section>
+      <div id="auth-root"></div>
     </header>
 
-    <main>
-      <section class="search-panel" aria-labelledby="search-title">
-        <div>
-          <h2 id="search-title">Find a frog</h2>
-          <p>
-            Search by name, color, mood, material, theme, or any tag in the
-            catalog.
-          </p>
-        </div>
-        <label class="search-box">
-          <span>Search frogs</span>
-          <input
-            id="searchInput"
-            type="search"
-            placeholder="Try: cosmic, radioactive, bronze, cursed"
-            autocomplete="off"
-          />
-        </label>
-      </section>
+    <main id="frogs-root"></main>
 
-      <section class="toolbar" aria-live="polite">
-        <span id="resultCount">Loading frogs...</span>
-        <div class="toolbar-actions">
-          <button id="favoritesFilter" type="button" aria-pressed="false" disabled title="Log in to filter favorites">My Favorites</button>
-          <button id="clearSearch" type="button">Clear</button>
-        </div>
-      </section>
-
-      <section
-        id="frogGrid"
-        class="frog-grid"
-        aria-label="Frog image results"
-      ></section>
-
-      <section id="emptyState" class="empty-state" hidden>
-        <h2>No frogs found</h2>
-        <p>Try a broader search term or add another tag to the frog catalog.</p>
-      </section>
-    </main>
-
-    <template id="frogCardTemplate">
-      <article class="frog-card">
-        <a class="image-link" target="_blank" rel="noreferrer">
-          <img loading="lazy" alt="" />
-        </a>
-        <button class="favorite-toggle" type="button" aria-pressed="false"></button>
-        <div class="frog-card-body">
-          <div>
-            <h2></h2>
-            <p class="description"></p>
-          </div>
-          <ul class="tag-list" aria-label="Tags"></ul>
-          <a class="download-button" download>Download PNG</a>
-        </div>
-      </article>
-    </template>
-
   </body>
 </html>
 
