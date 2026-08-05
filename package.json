@@ -7,13 +7,21 @@
     "dev": "scripts/with-secrets.sh vite",
     "build": "scripts/with-secrets.sh vite build",
     "preview": "scripts/with-secrets.sh vite preview",
-    "test": "scripts/with-secrets.sh vitest run"
+    "test": "scripts/with-secrets.sh vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.45.4"
+    "@supabase/supabase-js": "^2.45.4",
+    "@tanstack/react-query": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "axios": "^1.19.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.0.0",
     "vite": "^6.4.3",
     "vitest": "^4.1.10"
   }
