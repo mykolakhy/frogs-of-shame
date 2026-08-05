@@ -18,6 +18,12 @@ pipeline {
       }
     }
 
+    stage('Typecheck') {
+      steps {
+        sh 'npm run typecheck'
+      }
+    }
+
     stage('Test') {
       steps {
         // Same BWS project as Build below also holds TEST_USER_EMAIL/TEST_USER_PASSWORD,
