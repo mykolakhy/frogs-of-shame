@@ -47,7 +47,62 @@ npm run preview
 npm test
 ```
 
-Runs [`tests/favorites.rls.test.js`](tests/favorites.rls.test.js) via Vitest — integration tests that hit the live Supabase REST API directly with axios (not `supabase-js`) to verify the `favorites` table's row-level-security policies actually hold: anonymous requests see/write nothing, and an authenticated user can only read, insert, and delete their own rows. Requires the `TEST_USER_EMAIL`/`TEST_USER_PASSWORD` BWS secrets described above; runs against the real project, so it creates and cleans up one throwaway `favorites` row per run.
+Runs [`tests/favorites.rls.test.js`](tests/favorites.rls.test.js) via Vitest — integration tests that hit the live Supabase REST API directly with axios (not `supabase-js`) to verify the `favorites` table's row-level-security policies actually hold: anonymous requests see/write nothing, and an authenticated user can only read, insert, and delete their own rows. Requires the `TESTS_USER_EMAIL`/`TESTS_USER_PASS` BWS secrets described above; runs against the real project, so it creates and cleans up one throwaway `favorites` row per run.
+
+## CI/CD (Jenkins)
+
+[`Jenkinsfile`](Jenkinsfile) defines the pipeline: Checkout → Install → Typecheck → Test → Build → Deploy (pushes `dist/` to the `gh-pages` branch, which GitHub Pages serves). This section is for setting up a Jenkins instance that can run it — the live site's Jenkins already exists, so you only need this if you're standing up your own (e.g. a fresh machine, or a fork).
+
+1. **Install and run Jenkins** (macOS, via Homebrew):
+
+   ```bash
+   brew install jenkins-lts
+   brew services start jenkins-lts
+   ```
+
+   `brew services` runs it as a background `launchd` service on `http://localhost:8080` that survives closing the terminal and restarts automatically on login (vs. running `jenkins-lts` directly in a terminal, which dies when that terminal closes).
+
+2. **First-time setup wizard**: open `http://localhost:8080`, unlock with the contents of `~/.jenkins/secrets/initialAdminPassword`, install the suggested plugins (includes Git and Pipeline, both required here), then create your own admin user — don't leave the generated unlock password as your permanent login.
+
+3. **Fix Jenkins' PATH** — a `launchd` service starts with a bare `PATH` (`/usr/bin:/bin:/usr/sbin:/sbin`), so it won't see Node/npm (if installed via nvm) or the `bws` CLI (if installed via Homebrew on Apple Silicon). Rather than hardcoding your local username/paths into this (public) Jenkinsfile, add them as a **local-only** Jenkins global environment variable via a Groovy init script — this file lives in `~/.jenkins/`, never in this repo:
+
+   ```groovy
+   // ~/.jenkins/init.groovy.d/global-path.groovy
+   import jenkins.model.Jenkins
+   import hudson.slaves.EnvironmentVariablesNodeProperty
+
+   def jenkins = Jenkins.get()
+   def globalNodeProperties = jenkins.getGlobalNodeProperties()
+   def envVarsProperties = globalNodeProperties.getAll(EnvironmentVariablesNodeProperty.class)
+
+   def envVars
+   if (envVarsProperties.isEmpty()) {
+     def newProperty = new EnvironmentVariablesNodeProperty()
+     globalNodeProperties.add(newProperty)
+     envVars = newProperty.getEnvVars()
+   } else {
+     envVars = envVarsProperties.get(0).getEnvVars()
+   }
+
+   // "PATH+EXTRA" is Jenkins' convention for prepending to PATH instead of replacing it.
+   envVars.put("PATH+EXTRA", "/opt/homebrew/bin:/opt/homebrew/sbin:${System.getenv('HOME')}/.nvm/versions/node/<your-node-version>/bin")
+   jenkins.save()
+   ```
+
+   Init scripts in `init.groovy.d/` run once on every Jenkins startup, so `brew services restart jenkins-lts` afterward picks it up.
+
+4. **Install the `bws` CLI** on the Jenkins host (the [Bitwarden Secrets Manager CLI](https://bitwarden.com/help/secrets-manager-cli/)) and make sure it's on the `PATH` from step 3.
+
+5. **Add Jenkins Credentials** (Manage Jenkins → Credentials → System → Global credentials → Add Credentials):
+   - Secret text, ID `THEY_ARE_FROGS_BWS_ACCESS_TOKEN`
+   - Secret text, ID `THEY_ARE_FROGS_BWS_PROJECT_ID`
+   - Username with password, ID `github-pages-deploy-token` — your GitHub username + a personal access token with `repo` scope (used to push to `gh-pages`)
+
+6. **Create the pipeline job**: New Item → Pipeline, name it (the live one is `they-are-frogs-deploy`) → "Pipeline script from SCM" → Git → this repo's URL → branch `*/main` → script path `Jenkinsfile`.
+
+7. **Point GitHub Pages at the output**: repo Settings → Pages → Source → "Deploy from a branch" → `gh-pages` → `/ (root)`.
+
+Builds currently run on-demand via "Build Now" in the Jenkins UI — there's no GitHub webhook wired up, since that would require this Jenkins host to be reachable from the internet (and running whenever a build should fire), which a laptop-hosted instance isn't by default.
 
 ## Project Structure
 
@@ -61,7 +116,12 @@ they-are-frogs/
   src/
     main.tsx
     auth/
+      AuthModal.tsx
+      AuthWidget.tsx
+      useSupabaseSession.ts
     frogs/
+      FrogWidget.tsx
+      useAuthSessionBridge.ts
   script.js             # legacy fallback; no longer loaded
   supabaseClient.js
   favorites.js
