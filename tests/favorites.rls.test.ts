@@ -10,8 +10,8 @@ const authApi = new AuthApi(anonClient);
 const anonFavorites = new FavoritesApi(anonClient);
 
 const testFrogId = `rls-test-${Date.now()}`;
-let userId;
-let authedFavorites;
+let userId: string;
+let authedFavorites: FavoritesApi;
 
 beforeAll(async () => {
   const { status, data } = await authApi.login(TEST_EMAIL, TEST_PASSWORD);
