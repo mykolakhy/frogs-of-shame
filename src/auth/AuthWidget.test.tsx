@@ -124,3 +124,32 @@ describe("AuthWidget — auto-close on login", () => {
     expect(await screen.findByText("Signed in as frog@example.com")).toBeInTheDocument();
   });
 });
+
+describe("AuthWidget — password recovery", () => {
+  it("force-opens the modal into the reset screen on a PASSWORD_RECOVERY event, even though the modal was closed and nothing was clicked", async () => {
+    renderWidget();
+
+    // Sanity check: modal genuinely starts closed, unlike the other tests
+    // above which open it via a button click first.
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+
+    await waitFor(() => expect(mockOnAuthStateChange).toHaveBeenCalled());
+    authCallback?.("PASSWORD_RECOVERY", fakeSession("u1", "recover@example.com"));
+
+    expect(await screen.findByRole("heading", { name: "Set a new password" })).toBeInTheDocument();
+  });
+
+  it("does not close the reset screen the way a normal SIGNED_IN event would (the recovery-session guard)", async () => {
+    renderWidget();
+
+    await waitFor(() => expect(mockOnAuthStateChange).toHaveBeenCalled());
+    authCallback?.("PASSWORD_RECOVERY", fakeSession("u1", "recover@example.com"));
+    expect(await screen.findByRole("heading", { name: "Set a new password" })).toBeInTheDocument();
+
+    // Give the auto-close-on-session effect a chance to run — if the guard in
+    // AuthWidget were removed/broken, this is where the modal would
+    // incorrectly disappear.
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(screen.getByRole("heading", { name: "Set a new password" })).toBeInTheDocument();
+  });
+});

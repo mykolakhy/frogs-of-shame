@@ -444,7 +444,7 @@ h1 {
   color: var(--accent-strong);
 }
 
-#authForm .auth-field {
+.auth-form .auth-field {
   display: grid;
   gap: 8px;
   color: var(--muted);
@@ -453,7 +453,7 @@ h1 {
   margin-bottom: 16px;
 }
 
-#authForm .auth-field input {
+.auth-form .auth-field input {
   width: 100%;
   min-height: 48px;
   box-sizing: border-box;
@@ -466,12 +466,12 @@ h1 {
   padding: 0 14px;
 }
 
-#authForm .auth-field input:focus-visible {
+.auth-form .auth-field input:focus-visible {
   border-color: var(--focus);
   box-shadow: 0 0 0 3px rgba(141, 215, 255, 0.22);
 }
 
-#authForm .auth-field[hidden] {
+.auth-form .auth-field[hidden] {
   display: none;
 }
 

@@ -85,6 +85,25 @@ describe("useSupabaseSession", () => {
     document.removeEventListener("frog-auth-changed", handler);
   });
 
+  it("exposes the PASSWORD_RECOVERY event type when onAuthStateChange fires with it", async () => {
+    let authCallback: ((event: string, session: Session | null) => void) | undefined;
+    mockOnAuthStateChange.mockImplementation((callback: (event: string, session: Session | null) => void) => {
+      authCallback = callback;
+      return { data: { subscription: { unsubscribe: mockUnsubscribe } } };
+    });
+
+    const { result } = renderHook(() => useSupabaseSession());
+    await waitFor(() => expect(mockOnAuthStateChange).toHaveBeenCalled());
+
+    expect(result.current.event).toBeNull();
+
+    const recoverySession = fakeSession("u3", "recover@example.com");
+    authCallback?.("PASSWORD_RECOVERY", recoverySession);
+
+    await waitFor(() => expect(result.current.event).toBe("PASSWORD_RECOVERY"));
+    expect(result.current.session).toEqual(recoverySession);
+  });
+
   it("unsubscribes from the auth listener on unmount", async () => {
     const { unmount } = renderHook(() => useSupabaseSession());
 
