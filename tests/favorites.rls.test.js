@@ -1,90 +1,68 @@
-import axios from "axios";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
+import { requireTestEnv, createAnonClient, createAuthedClient } from "./helpers/supabaseApi.js";
+import { AuthApi } from "./helpers/authApi.js";
+import { FavoritesApi } from "./helpers/favoritesApi.js";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
-const TEST_EMAIL = process.env.TESTS_USER_EMAIL;
-const TEST_PASSWORD = process.env.TESTS_USER_PASS;
+const { SUPABASE_URL, ANON_KEY, TEST_EMAIL, TEST_PASSWORD } = requireTestEnv();
 
-if (!SUPABASE_URL || !ANON_KEY || !TEST_EMAIL || !TEST_PASSWORD) {
-  throw new Error(
-    "Missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY / TESTS_USER_EMAIL / TESTS_USER_PASS — " +
-      "run tests via `npm test` so BWS secrets are injected (see README's Secrets section).",
-  );
-}
-
-// validateStatus lets tests assert on RLS-rejection status codes directly
-// instead of catching thrown errors for every negative case.
-const anon = axios.create({
-  baseURL: SUPABASE_URL,
-  headers: { apikey: ANON_KEY },
-  validateStatus: () => true,
-});
+const anonClient = createAnonClient(SUPABASE_URL, ANON_KEY);
+const authApi = new AuthApi(anonClient);
+const anonFavorites = new FavoritesApi(anonClient);
 
 const testFrogId = `rls-test-${Date.now()}`;
 let userId;
-let authed;
+let authedFavorites;
 
 beforeAll(async () => {
-  const login = await anon.post("/auth/v1/token?grant_type=password", {
-    email: TEST_EMAIL,
-    password: TEST_PASSWORD,
-  });
-  if (login.status !== 200) {
-    throw new Error(`Test-user login failed (${login.status}): ${JSON.stringify(login.data)}`);
+  const { status, data } = await authApi.login(TEST_EMAIL, TEST_PASSWORD);
+  if (status !== 200) {
+    throw new Error(`Test-user login failed (${status}): ${JSON.stringify(data)}`);
   }
 
-  userId = login.data.user.id;
-  authed = axios.create({
-    baseURL: SUPABASE_URL,
-    headers: { apikey: ANON_KEY, Authorization: `Bearer ${login.data.access_token}` },
-    validateStatus: () => true,
-  });
+  userId = data.user.id;
+  authedFavorites = new FavoritesApi(createAuthedClient(SUPABASE_URL, ANON_KEY, data.access_token));
 });
 
 afterAll(async () => {
-  await authed?.delete(`/rest/v1/favorites?frog_id=eq.${testFrogId}`);
+  await authedFavorites?.delete(testFrogId);
 });
 
 describe("favorites RLS policies", () => {
   test("anonymous requests see no rows", async () => {
-    const { status, data } = await anon.get("/rest/v1/favorites");
+    const { status, data } = await anonFavorites.list();
     expect(status).toBe(200);
     expect(data).toEqual([]);
   });
 
   test("anonymous insert is rejected", async () => {
-    const { status, data } = await anon.post("/rest/v1/favorites", {
-      user_id: "00000000-0000-0000-0000-000000000000",
-      frog_id: testFrogId,
-    });
+    const { status, data } = await anonFavorites.insert("00000000-0000-0000-0000-000000000000", testFrogId);
     expect(status).toBe(401);
     expect(data.code).toBe("42501"); // Postgres: RLS policy violation
   });
 
   test("authenticated user can insert and read their own favorite", async () => {
-    const insert = await authed.post("/rest/v1/favorites", { user_id: userId, frog_id: testFrogId });
+    const insert = await authedFavorites.insert(userId, testFrogId);
     expect(insert.status).toBe(201);
 
-    const read = await authed.get(`/rest/v1/favorites?frog_id=eq.${testFrogId}`);
+    const read = await authedFavorites.list(testFrogId);
     expect(read.data).toHaveLength(1);
     expect(read.data[0].user_id).toBe(userId);
   });
 
   test("authenticated user cannot insert a favorite for another user_id", async () => {
-    const { status, data } = await authed.post("/rest/v1/favorites", {
-      user_id: "00000000-0000-0000-0000-000000000000",
-      frog_id: `${testFrogId}-other`,
-    });
+    const { status, data } = await authedFavorites.insert(
+      "00000000-0000-0000-0000-000000000000",
+      `${testFrogId}-other`,
+    );
     expect(status).toBe(403);
     expect(data.code).toBe("42501"); // Postgres: RLS policy violation
   });
 
   test("authenticated user can delete their own favorite", async () => {
-    const del = await authed.delete(`/rest/v1/favorites?frog_id=eq.${testFrogId}`);
+    const del = await authedFavorites.delete(testFrogId);
     expect(del.status).toBe(204);
 
-    const read = await authed.get(`/rest/v1/favorites?frog_id=eq.${testFrogId}`);
+    const read = await authedFavorites.list(testFrogId);
     expect(read.data).toHaveLength(0);
   });
 });
