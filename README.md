@@ -2,7 +2,7 @@
 
 A small image bank for searchable, downloadable frog images. It is built as a static site, so it can be hosted on GitHub Pages, Netlify, Vercel, S3, or any static file host.
 
-Live site: <https://mykolakhy.github.io/they-are-frogs/>
+Live site: <https://theyarefrogs.com/>
 
 ## Secrets
 
