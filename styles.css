@@ -471,6 +471,11 @@ h1 {
   box-shadow: 0 0 0 3px rgba(141, 215, 255, 0.22);
 }
 
+.auth-form .auth-field input.invalid {
+  border-color: var(--danger-border);
+  color: var(--text);
+}
+
 .auth-form .auth-field[hidden] {
   display: none;
 }
@@ -582,6 +587,20 @@ h1 {
   cursor: pointer;
 }
 
+.link-button-muted {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--muted);
+  font: inherit;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.link-button-muted:hover {
+  color: var(--text);
+}
+
 .auth-success {
   display: flex;
   flex-direction: column;
@@ -622,6 +641,13 @@ h1 {
   background: var(--panel-strong);
   color: var(--text);
   margin-bottom: 0;
+}
+
+/* Same specificity as .auth-submit:hover (styles.css:559) — without this,
+   source order makes the rule above win on hover too, silently killing the
+   hover background change for buttons inside .auth-success. */
+.auth-success .auth-submit:hover {
+  background: #313a29;
 }
 
 @media (max-width: 720px) {

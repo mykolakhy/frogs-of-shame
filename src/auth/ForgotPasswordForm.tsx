@@ -79,7 +79,7 @@ export function ForgotPasswordForm({ onSuccess, onBackToLogin }: ForgotPasswordF
       </button>
 
       <p className="auth-switch">
-        <button type="button" className="link-button" onClick={onBackToLogin}>
+        <button type="button" className="link-button-muted" onClick={onBackToLogin}>
           Back to log in
         </button>
       </p>

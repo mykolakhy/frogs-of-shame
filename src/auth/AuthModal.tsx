@@ -172,6 +172,7 @@ export function AuthModal({ mode, onModeChange, onClose }: AuthModalProps) {
                   type="email"
                   autoComplete="email"
                   required
+                  className={mutation.isError ? "invalid" : undefined}
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                 />
@@ -186,6 +187,7 @@ export function AuthModal({ mode, onModeChange, onClose }: AuthModalProps) {
                     autoComplete="current-password"
                     required
                     minLength={6}
+                    className={errorMessage ? "invalid" : undefined}
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                   />
@@ -225,6 +227,7 @@ export function AuthModal({ mode, onModeChange, onClose }: AuthModalProps) {
                     autoComplete="new-password"
                     required={isSignUp}
                     minLength={6}
+                    className={validationError ? "invalid" : undefined}
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                   />
