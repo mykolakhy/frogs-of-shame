@@ -59,6 +59,7 @@ export function SetNewPasswordForm({ onSuccess }: SetNewPasswordFormProps) {
             autoComplete="new-password"
             required
             minLength={6}
+            className={errorMessage ? "invalid" : undefined}
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
@@ -96,6 +97,7 @@ export function SetNewPasswordForm({ onSuccess }: SetNewPasswordFormProps) {
             autoComplete="new-password"
             required
             minLength={6}
+            className={errorMessage ? "invalid" : undefined}
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
