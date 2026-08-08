@@ -236,11 +236,27 @@ type FrogCardProps = {
 
 function FrogCard({ frog, isFavorited, isAuthenticated, isPending, onFavoriteToggle }: FrogCardProps) {
   const imagePath = `./assets/frogs/${frog.file}`;
+  const previewPath = `./assets/frogs/previews/${frog.file.replace(/\.[^.]+$/, ".webp")}`;
 
   return (
     <article className="frog-card" data-frog-id={frog.id}>
       <a className="image-link" href={imagePath} target="_blank" rel="noreferrer">
-        <img loading="lazy" src={imagePath} alt={frog.title} />
+        <picture>
+          <source type="image/webp" srcSet={previewPath} />
+          <img
+            loading="lazy"
+            src={imagePath}
+            alt={frog.title}
+            onError={(event) => {
+              if (event.currentTarget.dataset.fallbackApplied) {
+                return;
+              }
+
+              event.currentTarget.dataset.fallbackApplied = "true";
+              event.currentTarget.src = imagePath;
+            }}
+          />
+        </picture>
       </a>
       <button
         className="favorite-toggle"

@@ -126,11 +126,14 @@ they-are-frogs/
   supabaseClient.js
   favorites.js
   scripts/
+    generate-image-previews.sh
     with-secrets.sh
   public/
     assets/
       frogs.json
       frogs/
+        previews/
+          *.webp
         *.png
   supabase/
     migrations/
@@ -142,12 +145,19 @@ they-are-frogs/
 
 The searchable catalog lives in `public/assets/frogs.json`; image files live in `public/assets/frogs/`. Files under `public/` are Vite's static passthrough directory, so they're served/copied unchanged in both dev and build (still reachable at `./assets/...` at runtime).
 
+Gallery cards use 640px-wide WebP previews from `public/assets/frogs/previews/`, while the original PNG files remain available for full-size viewing and download. To regenerate previews after adding or replacing frog images, install the WebP tools (`brew install webp`) and run:
+
+```bash
+npm run images:build
+```
+
 ## Add Another Frog
 
 1. Put the new image file in `public/assets/frogs/`.
 2. Add a new entry to `public/assets/frogs.json`.
-3. Run the site locally and confirm the frog appears in search results.
-4. Open a pull request against `main`.
+3. Regenerate the gallery preview with `npm run images:build`.
+4. Run the site locally and confirm the frog appears in search results.
+5. Open a pull request against `main`.
 
 Example entry:
 
