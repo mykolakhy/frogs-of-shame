@@ -8,6 +8,7 @@
     "build": "scripts/with-secrets.sh vite build",
     "preview": "scripts/with-secrets.sh vite preview",
     "test": "scripts/with-secrets.sh vitest run",
+    "images:build": "scripts/generate-image-previews.sh",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
