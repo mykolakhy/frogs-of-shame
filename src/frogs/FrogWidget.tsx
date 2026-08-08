@@ -2,14 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addFavorite, getFavoriteIds, removeFavorite } from "../../favorites.js";
 import { useAuthSessionBridge } from "./useAuthSessionBridge";
-
-type Frog = {
-  id: string;
-  title: string;
-  file: string;
-  description: string;
-  tags: string[];
-};
+import { parseFrogCatalog } from "./frogCatalog";
+import { matchesFrogQuery, type Frog } from "./frogSearch";
 
 type FavoriteMutationVariables = {
   frogId: string;
@@ -20,22 +14,6 @@ type FavoriteMutationContext = {
   previousFavoriteIds: Set<string>;
 };
 
-const normalize = (value: string) => value.toLowerCase().trim();
-
-const searchableText = (frog: Frog) =>
-  normalize([frog.title, frog.description, frog.file, ...frog.tags].join(" "));
-
-const matchesQuery = (frog: Frog, query: string) => {
-  if (!query) {
-    return true;
-  }
-
-  const words = normalize(query).split(/\s+/).filter(Boolean);
-  const haystack = searchableText(frog);
-
-  return words.every((word) => haystack.includes(word));
-};
-
 async function fetchFrogs(): Promise<Frog[]> {
   const response = await fetch("./assets/frogs.json");
 
@@ -43,7 +21,7 @@ async function fetchFrogs(): Promise<Frog[]> {
     throw new Error(`Catalog request failed: ${response.status}`);
   }
 
-  return (await response.json()) as Frog[];
+  return parseFrogCatalog(await response.json());
 }
 
 export function FrogWidget() {
@@ -133,7 +111,7 @@ export function FrogWidget() {
   const frogs = frogsQuery.data ?? [];
   const favoriteIds = favoriteIdsQuery.data ?? new Set<string>();
   const filteredFrogs = useMemo(
-    () => frogs.filter((frog) => matchesQuery(frog, query) && (!showFavoritesOnly || favoriteIds.has(frog.id))),
+    () => frogs.filter((frog) => matchesFrogQuery(frog, query) && (!showFavoritesOnly || favoriteIds.has(frog.id))),
     [favoriteIds, frogs, query, showFavoritesOnly],
   );
 

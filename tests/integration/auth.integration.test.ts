@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from "vitest";
-import { requireTestEnv } from "./helpers/supabaseApi.js";
-import { supabase } from "../supabaseClient.js";
+import { requireTestEnv } from "../support/api/supabaseApi.js";
+import { supabase } from "../../supabaseClient.js";
 
 // Unlike auth.api.test.ts (raw HTTP against Supabase's REST/Auth API, any
 // client's contract), this suite drives the actual @supabase/supabase-js
@@ -18,8 +18,7 @@ if (!supabase) {
 }
 
 // TS can't carry the null-check narrowing above into the test() closures
-// below (same reason AuthWidget.tsx binds `authClient` locally) — so bind a
-// non-null local once and use that everywhere instead of `supabase` directly.
+// below, so bind a non-null local once and use that everywhere.
 const client = supabase;
 
 afterEach(async () => {
@@ -58,9 +57,6 @@ describe("client.auth.signUp", () => {
       password: TEST_PASSWORD,
     });
 
-    // Same anti-enumeration behavior verified at the REST layer in
-    // auth.api.test.ts: no error, but an empty `identities` array and no
-    // session distinguish this from a real signup.
     expect(error).toBeNull();
     expect(data.session).toBeNull();
     expect(data.user?.identities).toEqual([]);

@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { requireTestEnv, createAnonClient, createAuthedClient } from "./helpers/supabaseApi.js";
-import { AuthApi } from "./helpers/authApi.js";
-import { FavoritesApi } from "./helpers/favoritesApi.js";
+import { requireTestEnv, createAnonClient, createAuthedClient } from "../support/api/supabaseApi.js";
+import { AuthApi } from "../support/api/authApi.js";
+import { FavoritesApi } from "../support/api/favoritesApi.js";
 
 const { SUPABASE_URL, ANON_KEY, TEST_EMAIL, TEST_PASSWORD } = requireTestEnv();
 

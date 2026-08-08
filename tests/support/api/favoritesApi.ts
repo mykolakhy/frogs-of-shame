@@ -1,6 +1,6 @@
 import type { AxiosInstance, AxiosResponse } from "axios";
 
-// Same idea as AuthApi, for the `favorites` table's REST endpoints.
+// Same idea as AuthApi, for the favorites table's REST endpoints.
 export class FavoritesApi {
   constructor(private client: AxiosInstance) {}
 
