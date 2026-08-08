@@ -189,19 +189,21 @@ export function FrogWidget() {
       <section className="toolbar" aria-live="polite">
         <span id="resultCount">{resultText}</span>
         <div className="toolbar-actions">
-          <button
-            id="favoritesFilter"
-            type="button"
-            aria-pressed={showFavoritesOnly}
-            disabled={!userId}
-            title={userId ? "" : "Log in to filter favorites"}
-            onClick={() => setShowFavoritesOnly((visible) => !visible)}
-          >
-            My Favorites
-          </button>
-          <button id="clearSearch" type="button" onClick={handleClearSearch}>
-            Clear
-          </button>
+          {userId ? (
+            <button
+              id="favoritesFilter"
+              type="button"
+              aria-pressed={showFavoritesOnly}
+              onClick={() => setShowFavoritesOnly((visible) => !visible)}
+            >
+              My Favorites
+            </button>
+          ) : null}
+          {query.trim() ? (
+            <button id="clearSearch" type="button" onClick={handleClearSearch}>
+              Clear
+            </button>
+          ) : null}
         </div>
       </section>
 
@@ -258,22 +260,18 @@ function FrogCard({ frog, isFavorited, isAuthenticated, isPending, onFavoriteTog
           />
         </picture>
       </a>
-      <button
-        className="favorite-toggle"
-        type="button"
-        aria-pressed={isFavorited}
-        disabled={!isAuthenticated || isPending}
-        aria-label={
-          !isAuthenticated
-            ? "Log in to save favorites"
-            : isFavorited
-              ? "Remove from favorites"
-              : "Add to favorites"
-        }
-        onClick={() => onFavoriteToggle(frog.id)}
-      >
-        {isFavorited ? "★" : "☆"}
-      </button>
+      {isAuthenticated ? (
+        <button
+          className="favorite-toggle"
+          type="button"
+          aria-pressed={isFavorited}
+          disabled={isPending}
+          aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+          onClick={() => onFavoriteToggle(frog.id)}
+        >
+          {isFavorited ? "★" : "☆"}
+        </button>
+      ) : null}
       <div className="frog-card-body">
         <div>
           <h2>{frog.title}</h2>

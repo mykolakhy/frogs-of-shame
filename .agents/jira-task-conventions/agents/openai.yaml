@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jira Task Conventions"
+  short_description: "Create and update Jira tasks using the project conventions."
+  default_prompt: "Use $jira-task-conventions when creating, editing, or reviewing Jira tickets."

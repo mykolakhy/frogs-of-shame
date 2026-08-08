@@ -2,3 +2,13 @@ _local
 .vscode
 node_modules/
 dist/
+
+# Local secrets and environment files
+.env*
+!.env.example
+
+# Local agent configuration and input files
+.claude/settings.local.json
+.claude/launch.json
+.claude/worktrees/
+_incoming_frogs/
