@@ -37,6 +37,18 @@ pipeline {
       }
     }
 
+    stage('E2E') {
+      steps {
+        withCredentials([
+          string(credentialsId: 'THEY_ARE_FROGS_BWS_ACCESS_TOKEN', variable: 'BWS_ACCESS_TOKEN'),
+          string(credentialsId: 'THEY_ARE_FROGS_BWS_PROJECT_ID', variable: 'BWS_PROJECT_ID')
+        ]) {
+          sh 'bws run --project-id "$BWS_PROJECT_ID" -- npx playwright install chromium'
+          sh 'bws run --project-id "$BWS_PROJECT_ID" -- npx playwright test'
+        }
+      }
+    }
+
     stage('Build') {
       steps {
         // Calls vite directly (not "npm run build") — that npm script goes through

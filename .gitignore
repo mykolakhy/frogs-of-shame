@@ -2,6 +2,8 @@ _local
 .vscode
 node_modules/
 dist/
+playwright-report/
+test-results/
 
 # Local secrets and environment files
 .env*

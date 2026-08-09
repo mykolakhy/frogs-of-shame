@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Test Coverage in Confluence"
+  short_description: "Keep Confluence test counts in sync"
+  default_prompt: "Use $update-test-coverage-confluence after adding or changing tests to refresh the Test Pyramid Confluence page."

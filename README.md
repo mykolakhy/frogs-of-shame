@@ -47,11 +47,11 @@ npm run preview
 npm test
 ```
 
-Runs [`tests/favorites.rls.test.js`](tests/favorites.rls.test.js) via Vitest — integration tests that hit the live Supabase REST API directly with axios (not `supabase-js`) to verify the `favorites` table's row-level-security policies actually hold: anonymous requests see/write nothing, and an authenticated user can only read, insert, and delete their own rows. Requires the `TESTS_USER_EMAIL`/`TESTS_USER_PASS` BWS secrets described above; runs against the real project, so it creates and cleans up one throwaway `favorites` row per run.
+Runs the Vitest suite. Use the focused commands in [`TESTING.md`](TESTING.md) to run a single test layer. The API and integration suites hit the live Supabase project and require the `TESTS_USER_EMAIL`/`TESTS_USER_PASS` BWS secrets; the RLS suite creates and cleans up one throwaway `favorites` row per run. Run `npm run test:e2e` for browser-level Playwright tests and `npm run test:count` for the current category totals.
 
 ## CI/CD (Jenkins)
 
-[`Jenkinsfile`](Jenkinsfile) defines the pipeline: Checkout → Install → Typecheck → Test → Build → Deploy (pushes `dist/` to the `gh-pages` branch, which GitHub Pages serves). This section is for setting up a Jenkins instance that can run it — the live site's Jenkins already exists, so you only need this if you're standing up your own (e.g. a fresh machine, or a fork).
+[`Jenkinsfile`](Jenkinsfile) defines the pipeline: Checkout → Install → Typecheck → Test → E2E → Build → Deploy (pushes `dist/` to the `gh-pages` branch, which GitHub Pages serves). This section is for setting up a Jenkins instance that can run it — the live site's Jenkins already exists, so you only need this if you're standing up your own (e.g. a fresh machine, or a fork).
 
 1. **Install and run Jenkins** (macOS, via Homebrew):
 
@@ -121,6 +121,8 @@ they-are-frogs/
       useSupabaseSession.ts
     frogs/
       FrogWidget.tsx
+      frogCatalog.ts
+      frogSearch.ts
       useAuthSessionBridge.ts
   script.js             # legacy fallback; no longer loaded
   supabaseClient.js
@@ -139,7 +141,22 @@ they-are-frogs/
     migrations/
       0001_favorites.sql
   tests/
-    favorites.rls.test.js
+    api/
+      auth.api.test.ts
+    integration/
+      auth.integration.test.ts
+      favorites.rls.test.ts
+    contracts/
+      frogs-catalog.contract.test.ts
+    support/
+      services/
+  e2e/
+    pages/
+    components/
+    fixtures/
+    specs/
+  playwright.config.ts
+  TESTING.md
   Jenkinsfile
 ```
 
