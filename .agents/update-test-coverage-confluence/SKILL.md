@@ -19,7 +19,7 @@ Find the existing Confluence page by title in the connected workspace. Do not ha
 
 1. Work from the repository root and inspect the test diff.
 2. Run `npm run test:count` after all test-related file changes are complete. Treat its output as the authoritative count. Do not count test files manually.
-3. Run the relevant validation available for the changed scope, such as `npm run typecheck`, `npm run test:fast`, `npm run test:contracts`, or the relevant API/integration/E2E command. Record which checks passed, failed, or were blocked by missing secrets/tools.
+3. Run the relevant validation available for the changed scope, such as `npm run typecheck`, `npm run test:unit-component`, `npm run test:contracts`, or the relevant API/integration/E2E command. Record which checks passed, failed, or were blocked by missing secrets/tools.
 4. Search the connected Confluence workspace for `🧪 Test Pyramid — Automated Test Coverage`. If the title has a date suffix, select the current page whose title starts with that phrase and belongs to the They Are Frogs project space. Fetch the selected page before updating it. Preserve the current page structure and English language.
 5. Update the same page with:
    - the current date as `Report date`;

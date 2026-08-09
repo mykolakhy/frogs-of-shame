@@ -5,7 +5,7 @@ The repository follows a layered test strategy. A test's level is determined by 
 ## Test commands
 
 ```bash
-npm run test:fast         # Unit and component/module tests
+npm run test:unit-component # Unit and component/module tests
 npm run test:api          # Live Supabase REST API tests
 npm run test:integration  # Live Supabase SDK and RLS integration tests
 npm run test:contracts    # Public frog-catalog contract tests
