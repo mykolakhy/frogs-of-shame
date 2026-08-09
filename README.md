@@ -149,10 +149,10 @@ they-are-frogs/
     contracts/
       frogs-catalog.contract.test.ts
     support/
-      api/
+      services/
   e2e/
     pages/
-    screens/
+    components/
     fixtures/
     specs/
   playwright.config.ts

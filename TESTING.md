@@ -35,7 +35,7 @@ tests/
 
 e2e/
   pages/                      # Page Objects
-  screens/                    # Screen/component Objects
+  components/                 # Reusable UI component objects
   fixtures/                   # Playwright fixtures
   specs/                      # Browser-level user journeys
 ```
