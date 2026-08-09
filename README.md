@@ -23,6 +23,8 @@ On CI (Jenkins), the same two pointers come from Jenkins Credentials instead of 
 
 The `favorites` table's row-level-security policies are exercised by real HTTP calls against Supabase (see [Tests](#tests) below), which needs one more BWS secret pair: `TESTS_USER_EMAIL` and `TESTS_USER_PASS`, holding the credentials of a dedicated Supabase Auth user with a confirmed email (create it once via the Supabase dashboard, then add its email/password as those two secrets in the same BWS project). This account only ever touches its own `favorites` rows, so it needs no special privileges.
 
+The signup E2E test runs as part of `npm run test:e2e` and needs a dedicated, disposable `E2E_SIGNUP_EMAIL` address authorized to receive confirmation emails plus a server-side Supabase secret key named `SUPABASE_SECRET_KEY`. The key is used only by the Playwright test runner to delete the user created by the browser flow. Do not reuse `TESTS_USER_EMAIL`, because that account is shared by API/integration tests. Configure a Supabase SMTP provider or authorize the dedicated address with the project's email service before running E2E tests. Never prefix the admin secret with `VITE_`, expose it to frontend code, or commit it to the repository.
+
 ## Run Locally
 
 From this folder (after the one-time secrets setup above):
