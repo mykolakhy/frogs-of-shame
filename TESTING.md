@@ -16,7 +16,7 @@ npm test                  # Existing full Vitest suite
 
 API and integration suites require the BWS-injected Supabase and dedicated test-user secrets described in the README. E2E tests use the same credentials when available; set `E2E_TEST_EMAIL` and `E2E_TEST_PASSWORD` to use a separate browser test account.
 
-The successful-signup E2E scenario is opt-in and additionally requires a dedicated `E2E_SIGNUP_EMAIL`, the server-side `SUPABASE_SECRET_KEY` BWS secret, and `E2E_SIGNUP_TEST_ENABLED=true`. The email must be authorized to receive Supabase confirmation messages. The Playwright runner uses the key to delete the disposable Auth user after the browser flow; the key is never exposed through Vite or sent to the browser. Do not reuse `TESTS_USER_EMAIL`.
+The successful-signup E2E scenario runs as part of `npm run test:e2e` and additionally requires a dedicated `E2E_SIGNUP_EMAIL` and the server-side `SUPABASE_SECRET_KEY` BWS secret. The email must be authorized to receive Supabase confirmation messages. The Playwright runner uses the key to delete the disposable Auth user after the browser flow; the key is never exposed through Vite or sent to the browser. Do not reuse `TESTS_USER_EMAIL`.
 
 ## Repository layout
 

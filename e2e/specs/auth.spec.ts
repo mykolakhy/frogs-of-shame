@@ -8,7 +8,6 @@ import {
 const testEmail = process.env.E2E_TEST_EMAIL ?? process.env.TESTS_USER_EMAIL;
 const testPassword = process.env.E2E_TEST_PASSWORD ?? process.env.TESTS_USER_PASS;
 const supabaseConfigured = Boolean(process.env.VITE_SUPABASE_URL && process.env.VITE_SUPABASE_ANON_KEY);
-const signupE2eEnabled = process.env.E2E_SIGNUP_TEST_ENABLED === "true";
 const signupEmail = process.env.E2E_SIGNUP_EMAIL;
 
 test.describe("authentication", () => {
@@ -70,10 +69,6 @@ test.describe("authentication", () => {
   });
 
   test("new user can complete signup and the test user is deleted afterwards", async ({ homePage }) => {
-    test.skip(
-      !signupE2eEnabled,
-      "Set E2E_SIGNUP_TEST_ENABLED=true after configuring a Supabase SMTP provider for disposable signup addresses.",
-    );
     test.skip(
       !hasSupabaseAdminCredentials(),
       "SUPABASE_SECRET_KEY is required to clean up the signup test user.",
