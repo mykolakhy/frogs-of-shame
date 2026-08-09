@@ -119,4 +119,71 @@ test.describe("authentication", () => {
     await homePage.auth.openLogin();
     await homePage.auth.closeWithBackdrop();
   });
+
+  test("keeps the auth modal within the mobile viewport", async ({ homePage }) => {
+    await homePage.page.setViewportSize({ width: 375, height: 812 });
+    await homePage.goto();
+    await homePage.auth.openSignup();
+
+    const dialogBox = await homePage.auth.dialog.boundingBox();
+    if (!dialogBox) {
+      throw new Error("The auth modal must have a visible bounding box.");
+    }
+
+    expect(dialogBox.x).toBeGreaterThanOrEqual(0);
+    expect(dialogBox.y).toBeGreaterThanOrEqual(0);
+    expect(dialogBox.x + dialogBox.width).toBeLessThanOrEqual(375);
+    expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(812);
+    await expect(homePage.auth.dialog.getByLabel("Email")).toBeVisible();
+    await expect(homePage.auth.dialog.getByLabel("Confirm password")).toBeVisible();
+  });
+
+  test("moves focus through signup fields and keeps keyboard focus inside the modal", async ({ homePage }) => {
+    await homePage.goto();
+    await homePage.auth.openSignup();
+
+    const emailInput = homePage.auth.dialog.getByLabel("Email");
+    const passwordInput = homePage.auth.dialog.locator("#authPassword");
+    const confirmPasswordInput = homePage.auth.dialog.locator("#authConfirmPassword");
+    const passwordToggle = homePage.auth.dialog.getByRole("button", { name: "Show password" }).first();
+    const closeButton = homePage.auth.dialog.getByRole("button", { name: "Close" });
+    const switchLink = homePage.auth.dialog.locator("#authSwitchLink");
+
+    await expect(emailInput).toBeFocused();
+    await homePage.page.keyboard.press("Tab");
+    await expect(passwordInput).toBeFocused();
+    await homePage.page.keyboard.press("Tab");
+    await expect(passwordToggle).toBeFocused();
+    await homePage.page.keyboard.press("Tab");
+    await expect(confirmPasswordInput).toBeFocused();
+
+    await switchLink.focus();
+    await homePage.page.keyboard.press("Tab");
+    await expect(closeButton).toBeFocused();
+
+    await closeButton.focus();
+    await homePage.page.keyboard.press("Shift+Tab");
+    await expect(switchLink).toBeFocused();
+  });
+
+  test("exposes accessible dialog, tabs, and form labels", async ({ homePage }) => {
+    await homePage.goto();
+    await homePage.auth.openSignup();
+
+    await expect(homePage.auth.dialog).toHaveAttribute("aria-modal", "true");
+    await expect(homePage.auth.dialog).toHaveAttribute("aria-labelledby", "authModalTitle");
+    await expect(homePage.auth.dialog.getByRole("heading", { name: "Create account" })).toHaveAttribute(
+      "id",
+      "authModalTitle",
+    );
+    await expect(homePage.auth.dialog.getByRole("tablist")).toBeVisible();
+    await expect(homePage.auth.dialog.getByRole("tab", { name: "Log in" })).toHaveAttribute("aria-selected", "false");
+    await expect(homePage.auth.dialog.getByRole("tab", { name: "Sign up" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await expect(homePage.auth.dialog.getByLabel("Email")).toBeVisible();
+    await expect(homePage.auth.dialog.locator("#authPassword")).toBeVisible();
+    await expect(homePage.auth.dialog.locator("#authConfirmPassword")).toBeVisible();
+  });
 });
