@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
-import { AuthModal } from "../screens/AuthModal";
-import { FrogCatalog } from "../screens/FrogCatalog";
+import { AuthModal } from "../components/AuthModal";
+import { FrogCatalog } from "../components/FrogCatalog";
 
 export class HomePage {
   readonly auth: AuthModal;

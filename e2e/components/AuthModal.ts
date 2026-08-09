@@ -16,7 +16,7 @@ export class AuthModal {
 
   async login(email: string, password: string) {
     await this.dialog.getByLabel("Email").fill(email);
-    await this.dialog.getByLabel("Password").fill(password);
+    await this.dialog.locator("#authPassword").fill(password);
     await this.dialog.getByRole("button", { name: "Log in" }).click();
     await expect(this.dialog).toBeHidden();
     await expect(this.session).toContainText(`Signed in as ${email}`);

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test } from "vitest";
-import { requireTestEnv } from "../support/api/supabaseApi.js";
+import { requireTestEnv } from "../support/services/supabaseClient.js";
 import { supabase } from "../../supabaseClient.js";
 
 // Unlike auth.api.test.ts (raw HTTP against Supabase's REST/Auth API, any

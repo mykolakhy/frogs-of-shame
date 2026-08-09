@@ -7,8 +7,8 @@ export type TestEnv = {
   TEST_PASSWORD: string;
 };
 
-// Central place for the env vars every API/integration test needs, so each
-// test file doesn't repeat its own copy of this guard clause.
+// Central place for the environment guard and HTTP clients used by service
+// objects in API and integration tests.
 export function requireTestEnv(): TestEnv {
   const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
   const ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
@@ -25,7 +25,7 @@ export function requireTestEnv(): TestEnv {
   return { SUPABASE_URL, ANON_KEY, TEST_EMAIL, TEST_PASSWORD };
 }
 
-// validateStatus lets tests assert on exact status codes directly instead of
+// validateStatus lets tests assert exact status codes directly instead of
 // catching thrown errors for every negative case.
 export function createAnonClient(supabaseUrl: string, anonKey: string): AxiosInstance {
   return axios.create({

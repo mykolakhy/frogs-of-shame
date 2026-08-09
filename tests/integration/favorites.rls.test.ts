@@ -1,26 +1,26 @@
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
-import { requireTestEnv, createAnonClient, createAuthedClient } from "../support/api/supabaseApi.js";
-import { AuthApi } from "../support/api/authApi.js";
-import { FavoritesApi } from "../support/api/favoritesApi.js";
+import { requireTestEnv, createAnonClient, createAuthedClient } from "../support/services/supabaseClient.js";
+import { AuthService } from "../support/services/authService.js";
+import { FavoritesService } from "../support/services/favoritesService.js";
 
 const { SUPABASE_URL, ANON_KEY, TEST_EMAIL, TEST_PASSWORD } = requireTestEnv();
 
 const anonClient = createAnonClient(SUPABASE_URL, ANON_KEY);
-const authApi = new AuthApi(anonClient);
-const anonFavorites = new FavoritesApi(anonClient);
+const authService = new AuthService(anonClient);
+const anonFavorites = new FavoritesService(anonClient);
 
 const testFrogId = `rls-test-${Date.now()}`;
 let userId: string;
-let authedFavorites: FavoritesApi;
+let authedFavorites: FavoritesService;
 
 beforeAll(async () => {
-  const { status, data } = await authApi.login(TEST_EMAIL, TEST_PASSWORD);
+  const { status, data } = await authService.login(TEST_EMAIL, TEST_PASSWORD);
   if (status !== 200) {
     throw new Error(`Test-user login failed (${status}): ${JSON.stringify(data)}`);
   }
 
   userId = data.user.id;
-  authedFavorites = new FavoritesApi(createAuthedClient(SUPABASE_URL, ANON_KEY, data.access_token));
+  authedFavorites = new FavoritesService(createAuthedClient(SUPABASE_URL, ANON_KEY, data.access_token));
 });
 
 afterAll(async () => {

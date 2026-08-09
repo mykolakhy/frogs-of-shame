@@ -31,7 +31,7 @@ tests/
   api/                        # API/service tests
   integration/                # Real Supabase SDK and RLS tests
   contracts/                  # Public data/interface contracts
-  support/api/                # Reusable API clients and test environment guards
+  support/services/           # Service Objects (SOM) and test environment guards
 
 e2e/
   pages/                      # Page Objects
@@ -40,8 +40,17 @@ e2e/
   specs/                      # Browser-level user journeys
 ```
 
-## POM/SOM rule
+## POM and SOM rule
 
-Page and Screen Objects belong only in `e2e/`. Unit, component, API, contract, and integration tests should test the smallest useful scope directly and should not hide their behavior behind browser-oriented abstractions.
+Page Objects and reusable UI component objects belong only in `e2e/`:
 
-E2E objects should expose user/business actions such as `searchFor()` and `login()`, use accessible locators first, and avoid wrappers around individual `click()` calls.
+- `e2e/pages/` contains Page Objects (POM) that represent navigable application pages.
+- `e2e/components/` contains reusable UI component objects composed by Page Objects.
+
+Service Objects belong in `tests/support/services/`:
+
+- Service Objects (SOM) encapsulate calls to external services such as Supabase Auth and REST endpoints.
+- API and integration tests may use Service Objects, but the tests own the assertions about the response and business behavior.
+- Unit and component tests should test the smallest useful scope directly and should not depend on browser or live-service abstractions.
+
+E2E Page and component objects should expose user/business actions such as `searchFor()` and `login()`, use accessible locators first, and avoid wrappers around individual `click()` calls.
