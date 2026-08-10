@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addFavorite, getFavoriteIds, removeFavorite } from "../../favorites.js";
 import { useAuthSessionBridge } from "./useAuthSessionBridge";
@@ -29,7 +29,9 @@ export function FrogWidget() {
   const queryClient = useQueryClient();
   const [query, setQuery] = useState("");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [selectedFrog, setSelectedFrog] = useState<Frog | null>(null);
   const searchInput = useRef<HTMLInputElement>(null);
+  const selectedFrogTrigger = useRef<HTMLButtonElement | null>(null);
   const userId = session?.user?.id ?? null;
   const favoriteQueryKey = ["favoriteIds", userId] as const;
 
@@ -128,6 +130,16 @@ export function FrogWidget() {
     favoriteMutation.mutate({ frogId, wasFavorited: favoriteIds.has(frogId) });
   };
 
+  const handleOpenDetails = useCallback((frog: Frog, trigger: HTMLButtonElement) => {
+    selectedFrogTrigger.current = trigger;
+    setSelectedFrog(frog);
+  }, []);
+
+  const handleCloseDetails = useCallback(() => {
+    setSelectedFrog(null);
+    selectedFrogTrigger.current?.focus();
+  }, []);
+
   const resultText = frogsQuery.isPending
     ? "Loading frogs..."
     : frogsQuery.isError
@@ -194,6 +206,7 @@ export function FrogWidget() {
             isAuthenticated={Boolean(userId)}
             isPending={favoriteMutation.isPending && favoriteMutation.variables?.frogId === frog.id}
             onFavoriteToggle={handleFavoriteToggle}
+            onOpenDetails={handleOpenDetails}
           />
         ))}
       </section>
@@ -202,6 +215,8 @@ export function FrogWidget() {
         <h2>No frogs found</h2>
         <p>{emptyStateMessage}</p>
       </section>
+
+      {selectedFrog ? <FrogDetailModal frog={selectedFrog} onClose={handleCloseDetails} /> : null}
     </>
   );
 }
@@ -212,15 +227,28 @@ type FrogCardProps = {
   isAuthenticated: boolean;
   isPending: boolean;
   onFavoriteToggle: (frogId: string) => void;
+  onOpenDetails: (frog: Frog, trigger: HTMLButtonElement) => void;
 };
 
-function FrogCard({ frog, isFavorited, isAuthenticated, isPending, onFavoriteToggle }: FrogCardProps) {
+function FrogCard({
+  frog,
+  isFavorited,
+  isAuthenticated,
+  isPending,
+  onFavoriteToggle,
+  onOpenDetails,
+}: FrogCardProps) {
   const imagePath = `./assets/frogs/${frog.file}`;
   const previewPath = `./assets/frogs/previews/${frog.file.replace(/\.[^.]+$/, ".webp")}`;
 
   return (
     <article className="frog-card" data-frog-id={frog.id}>
-      <a className="image-link" href={imagePath} target="_blank" rel="noreferrer">
+      <button
+        className="image-link"
+        type="button"
+        aria-label={`Open details for ${frog.title}`}
+        onClick={(event) => onOpenDetails(frog, event.currentTarget)}
+      >
         <picture>
           <source type="image/webp" srcSet={previewPath} />
           <img
@@ -237,7 +265,7 @@ function FrogCard({ frog, isFavorited, isAuthenticated, isPending, onFavoriteTog
             }}
           />
         </picture>
-      </a>
+      </button>
       {isAuthenticated ? (
         <button
           className="favorite-toggle"
@@ -265,5 +293,113 @@ function FrogCard({ frog, isFavorited, isAuthenticated, isPending, onFavoriteTog
         </a>
       </div>
     </article>
+  );
+}
+
+type FrogDetailModalProps = {
+  frog: Frog;
+  onClose: () => void;
+};
+
+function FrogDetailModal({ frog, onClose }: FrogDetailModalProps) {
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const modal = useRef<HTMLElement>(null);
+  const titleId = useId();
+  const imagePath = `./assets/frogs/${frog.file}`;
+
+  useEffect(() => {
+    const previousBodyOverflow = document.body.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    closeButton.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+        return;
+      }
+
+      if (event.key === "Tab") {
+        const focusableElements = modal.current?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+        );
+
+        if (!focusableElements?.length) {
+          return;
+        }
+
+        const firstFocusableElement = focusableElements[0];
+        const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstFocusableElement) {
+          event.preventDefault();
+          lastFocusableElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastFocusableElement) {
+          event.preventDefault();
+          firstFocusableElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <div
+      className="frog-detail-modal-backdrop"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <section ref={modal} className="frog-detail-modal" role="dialog" aria-modal="true" aria-labelledby={titleId}>
+        <header className="frog-detail-modal-header">
+          <h2 id={titleId}>{frog.title}</h2>
+          <ul className="tag-list" aria-label={`${frog.title} tags`}>
+            {frog.tags.map((tag) => (
+              <li key={tag}>{tag}</li>
+            ))}
+          </ul>
+        </header>
+
+        <div className="frog-detail-modal-content">
+          <div className="frog-detail-modal-image">
+            <img src={imagePath} alt={frog.title} />
+          </div>
+
+          <div className="frog-detail-modal-actions">
+            <button ref={closeButton} className="modal-icon-button" type="button" aria-label="Close" onClick={onClose}>
+              <XIcon />
+            </button>
+            <a className="modal-icon-button" href={imagePath} download={frog.file} aria-label="Download PNG">
+              <DownloadIcon />
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 }
