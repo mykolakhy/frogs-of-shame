@@ -434,6 +434,21 @@
                  ]
     },
     {
+        "id":  "original-frog-of-shame",
+        "title":  "Original Frog of Shame",
+        "file":  "original_frog_of_shame.png",
+        "description":  "An original frog of shame for awkward moments, public embarrassment, and painfully relatable mistakes.",
+        "tags":  [
+                     "original",
+                     "shame",
+                     "embarrassment",
+                     "awkward",
+                     "mistake",
+                     "meme",
+                     "reaction"
+                 ]
+    },
+    {
         "id":  "ruby-red",
         "title":  "Ruby Red Frog",
         "file":  "ruby_red_frog.png",
@@ -479,6 +494,22 @@
                      "shine",
                      "luxury",
                      "stone"
+                 ]
+    },
+    {
+        "id":  "shiny-rainbow-frog-of-shame",
+        "title":  "Shiny Rainbow Frog of Shame",
+        "file":  "shiny_rainbow_frog_of_shame.png",
+        "description":  "A shiny rainbow frog of shame for flamboyant embarrassment, colorful chaos, and spectacularly awkward moments.",
+        "tags":  [
+                     "shiny",
+                     "rainbow",
+                     "shame",
+                     "colorful",
+                     "embarrassment",
+                     "awkward",
+                     "meme",
+                     "reaction"
                  ]
     },
     {
