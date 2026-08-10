@@ -4,11 +4,13 @@ export class FrogCatalog {
   readonly searchInput: Locator;
   readonly resultCount: Locator;
   readonly favoritesFilter: Locator;
+  readonly clearButton: Locator;
 
   constructor(private readonly page: Page) {
     this.searchInput = page.getByRole("searchbox", { name: "Search frogs" });
     this.resultCount = page.locator("#resultCount");
     this.favoritesFilter = page.getByRole("button", { name: "My Favorites" });
+    this.clearButton = page.locator("#clearSearch");
   }
 
   async waitUntilLoaded() {
@@ -21,7 +23,7 @@ export class FrogCatalog {
   }
 
   async clearSearch() {
-    await this.page.getByRole("button", { name: "Clear" }).click();
+    await this.clearButton.click();
   }
 
   card(title: string) {
@@ -32,5 +34,26 @@ export class FrogCatalog {
 
   async expectCardVisible(title: string) {
     await expect(this.card(title)).toBeVisible();
+  }
+
+  async openDetails(title: string) {
+    await this.card(title).getByRole("button", { name: `Open details for ${title}` }).click();
+    await expect(this.detailModal(title)).toBeVisible();
+  }
+
+  detailModal(title: string) {
+    return this.page.getByRole("dialog", { name: title });
+  }
+
+  detailImage(title: string) {
+    return this.detailModal(title).getByRole("img", { name: title });
+  }
+
+  detailDownload(title: string) {
+    return this.detailModal(title).getByRole("link", { name: "Download PNG" });
+  }
+
+  detailClose(title: string) {
+    return this.detailModal(title).getByRole("button", { name: "Close" });
   }
 }
