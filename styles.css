@@ -217,9 +217,22 @@ h1 {
 
 .image-link {
   display: block;
+  width: 100%;
   overflow: hidden;
   aspect-ratio: 1.22;
+  margin: 0;
+  padding: 0;
+  border: 0;
   background: #050704;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.image-link:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
 }
 
 .image-link picture {
@@ -284,6 +297,108 @@ h1 {
   padding: 9px 12px;
   background: linear-gradient(135deg, #2a311f, #2e251b);
   color: var(--accent-strong);
+}
+
+.frog-detail-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: safe center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: rgba(5, 7, 4, 0.8);
+  overflow: auto;
+}
+
+.frog-detail-modal {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  transform: translateY(-24px);
+}
+
+.frog-detail-modal-header {
+  width: min(860px, 100%);
+  margin-bottom: 16px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.frog-detail-modal-header h2 {
+  margin-bottom: 12px;
+  font-size: 2rem;
+}
+
+.frog-detail-modal-content {
+  display: flex;
+  width: min(860px, 100%);
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.frog-detail-modal-image {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  max-width: 800px;
+  max-height: min(600px, calc(100vh - 230px));
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--input-bg);
+}
+
+.frog-detail-modal-image img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: min(600px, calc(100vh - 230px));
+  object-fit: contain;
+}
+
+.frog-detail-modal-actions {
+  display: flex;
+  width: 44px;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.modal-icon-button {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--scrim-strong);
+  color: var(--accent-strong);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.modal-icon-button:hover {
+  border-color: var(--accent);
+  background: rgba(5, 7, 4, 0.9);
+  transform: translateY(-1px);
+}
+
+.modal-icon-button:focus-visible {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(141, 215, 255, 0.22);
+  outline: none;
 }
 
 .empty-state {
@@ -675,5 +790,36 @@ h1 {
 
   .auth-modal {
     padding: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .frog-detail-modal-backdrop {
+    padding: 20px 12px;
+  }
+
+  .frog-detail-modal-content {
+    flex-direction: column;
+  }
+
+  .frog-detail-modal-image {
+    width: 100%;
+    max-width: none;
+    max-height: calc(100vh - 250px);
+  }
+
+  .frog-detail-modal {
+    transform: none;
+  }
+
+  .frog-detail-modal-image img {
+    max-height: calc(100vh - 250px);
+  }
+
+  .frog-detail-modal-actions {
+    width: auto;
+    flex-direction: row;
+    align-self: flex-end;
+    padding-top: 0;
   }
 }
