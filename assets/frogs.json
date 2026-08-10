@@ -1,5 +1,21 @@
 [
     {
+        "id":  "amazon-milk",
+        "title":  "Amazon Milk Frog",
+        "file":  "amazon_milk_frog.png",
+        "description":  "A pale brown-and-cream Amazon milk frog perched in a lush rainforest scene with glossy, rounded features.",
+        "tags":  [
+                     "amazon",
+                     "milk",
+                     "rainforest",
+                     "brown",
+                     "cream",
+                     "tropical",
+                     "glossy",
+                     "wildlife"
+                 ]
+    },
+    {
         "id":  "ancient-cursed",
         "title":  "Ancient Cursed Frog",
         "file":  "ancient_cursed_frog.png",
@@ -44,6 +60,21 @@
                      "fantasy",
                      "classic",
                      "wet"
+                 ]
+    },
+    {
+        "id":  "budgetts",
+        "title":  "Budgett's Frog",
+        "file":  "budgetts_frog.png",
+        "description":  "A broad, muddy Budgett's frog resting in wet ground with a chunky body and expressive eyes.",
+        "tags":  [
+                     "budgetts",
+                     "mud",
+                     "wetland",
+                     "chunky",
+                     "brown",
+                     "wildlife",
+                     "amphibian"
                  ]
     },
     {
@@ -106,6 +137,22 @@
                      "shine",
                      "light",
                      "gem"
+                 ]
+    },
+    {
+        "id":  "desert-rain",
+        "title":  "Desert Rain Frog",
+        "file":  "desert_rain_frog.png",
+        "description":  "A round sandy desert rain frog with a grumpy expression, mottled coloring, and arid landscape.",
+        "tags":  [
+                     "desert",
+                     "rain",
+                     "sand",
+                     "sandy",
+                     "arid",
+                     "grumpy",
+                     "mottled",
+                     "wildlife"
                  ]
     },
     {
@@ -232,6 +279,21 @@
                      "colorful",
                      "glowing",
                      "vivid"
+                 ]
+    },
+    {
+        "id":  "glass",
+        "title":  "Glass Frog",
+        "file":  "glass_frog.png",
+        "description":  "A translucent green glass frog with visible internal detail, speckled skin, and rainforest foliage.",
+        "tags":  [
+                     "glass",
+                     "translucent",
+                     "transparent",
+                     "green",
+                     "rainforest",
+                     "spotted",
+                     "tropical"
                  ]
     },
     {
@@ -511,6 +573,37 @@
                      "forms",
                      "accounting",
                      "suspicious"
+                 ]
+    },
+    {
+        "id":  "turtle",
+        "title":  "Turtle Frog",
+        "file":  "turtle_frog.png",
+        "description":  "A rounded turtle frog with a smooth shell-like back, pale pink skin, and sandy habitat.",
+        "tags":  [
+                     "turtle",
+                     "rounded",
+                     "shell",
+                     "pink",
+                     "sand",
+                     "smooth",
+                     "wildlife"
+                 ]
+    },
+    {
+        "id":  "vietnamese-mossy",
+        "title":  "Vietnamese Mossy Frog",
+        "file":  "vietnamese_mossy_frog.png",
+        "description":  "A camouflaged Vietnamese mossy frog covered in moss-like texture and perched on a damp forest branch.",
+        "tags":  [
+                     "vietnamese",
+                     "mossy",
+                     "camouflage",
+                     "green",
+                     "forest",
+                     "moss",
+                     "textured",
+                     "rainforest"
                  ]
     },
     {
