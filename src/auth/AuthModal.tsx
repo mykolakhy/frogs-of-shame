@@ -30,6 +30,7 @@ export function AuthModal({ mode, onModeChange, onClose }: AuthModalProps) {
   const [successVariant, setSuccessVariant] = useState<SuccessVariant>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const emailInput = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const isCredentialsMode = mode === "login" || mode === "signup";
   const isSignUp = mode === "signup";
@@ -66,6 +67,30 @@ export function AuthModal({ mode, onModeChange, onClose }: AuthModalProps) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         onClose();
+        return;
+      }
+
+      if (event.key === "Tab") {
+        const focusableElements = Array.from(
+          dialogRef.current?.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ) ?? [],
+        ).filter((element) => element.offsetParent !== null);
+
+        if (focusableElements.length === 0) {
+          return;
+        }
+
+        const firstFocusableElement = focusableElements[0];
+        const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstFocusableElement) {
+          event.preventDefault();
+          lastFocusableElement.focus();
+        } else if (!event.shiftKey && document.activeElement === lastFocusableElement) {
+          event.preventDefault();
+          firstFocusableElement.focus();
+        }
       }
     };
 
@@ -131,6 +156,7 @@ export function AuthModal({ mode, onModeChange, onClose }: AuthModalProps) {
         aria-modal="true"
         aria-labelledby="authModalTitle"
         data-mode={mode}
+        ref={dialogRef}
       >
         <button id="authModalClose" className="modal-close" type="button" aria-label="Close" onClick={onClose}>
           &times;
