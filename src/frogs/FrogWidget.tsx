@@ -216,7 +216,16 @@ export function FrogWidget() {
         <p>{emptyStateMessage}</p>
       </section>
 
-      {selectedFrog ? <FrogDetailModal frog={selectedFrog} onClose={handleCloseDetails} /> : null}
+      {selectedFrog ? (
+        <FrogDetailModal
+          frog={selectedFrog}
+          isAuthenticated={Boolean(userId)}
+          isFavorited={favoriteIds.has(selectedFrog.id)}
+          isPending={favoriteMutation.isPending && favoriteMutation.variables?.frogId === selectedFrog.id}
+          onFavoriteToggle={handleFavoriteToggle}
+          onClose={handleCloseDetails}
+        />
+      ) : null}
     </>
   );
 }
@@ -298,10 +307,14 @@ function FrogCard({
 
 type FrogDetailModalProps = {
   frog: Frog;
+  isAuthenticated: boolean;
+  isFavorited: boolean;
+  isPending: boolean;
+  onFavoriteToggle: (frogId: string) => void;
   onClose: () => void;
 };
 
-function FrogDetailModal({ frog, onClose }: FrogDetailModalProps) {
+function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavoriteToggle, onClose }: FrogDetailModalProps) {
   const closeButton = useRef<HTMLButtonElement>(null);
   const modal = useRef<HTMLElement>(null);
   const titleId = useId();
@@ -378,6 +391,18 @@ function FrogDetailModal({ frog, onClose }: FrogDetailModalProps) {
             <button ref={closeButton} className="modal-icon-button" type="button" aria-label="Close" onClick={onClose}>
               <XIcon />
             </button>
+            {isAuthenticated ? (
+              <button
+                className="modal-icon-button"
+                type="button"
+                aria-pressed={isFavorited}
+                disabled={isPending}
+                aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                onClick={() => onFavoriteToggle(frog.id)}
+              >
+                <span aria-hidden="true">{isFavorited ? "★" : "☆"}</span>
+              </button>
+            ) : null}
             <a className="modal-icon-button" href={imagePath} download={frog.file} aria-label="Download PNG">
               <DownloadIcon />
             </a>

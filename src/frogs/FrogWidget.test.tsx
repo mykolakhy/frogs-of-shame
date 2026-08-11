@@ -116,6 +116,7 @@ describe("FrogWidget frog detail modal", () => {
     );
     expect(within(dialog).getByRole("list", { name: "Ancient Cursed Frog tags" })).toHaveTextContent("ancient");
     expect(within(dialog).getByRole("button", { name: "Close" })).toHaveFocus();
+    expect(within(dialog).queryByRole("button", { name: "Add to favorites" })).not.toBeInTheDocument();
 
     const download = within(dialog).getByRole("link", { name: "Download PNG" });
     expect(download).toHaveAttribute("href", "./assets/frogs/ancient-cursed-frog.png");
@@ -184,7 +185,44 @@ describe("FrogWidget frog detail modal", () => {
 
     await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
 
-    expect(screen.getByRole("dialog", { name: "Ancient Cursed Frog" })).toBeInTheDocument();
+    const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
+
+    expect(dialog).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "My Favorites" })).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Add to favorites" })).toBeInTheDocument();
+  });
+
+  it("places Favorites between Close and Download and toggles the selected frog", async () => {
+    state.session = { user: { id: "user-1" } } as Session;
+    const favoriteIds = new Set<string>();
+    mockGetFavoriteIds.mockImplementation(async () => new Set(favoriteIds));
+    mockAddFavorite.mockImplementation(async (_userId: string, frogId: string) => {
+      favoriteIds.add(frogId);
+    });
+    mockRemoveFavorite.mockImplementation(async (_userId: string, frogId: string) => {
+      favoriteIds.delete(frogId);
+    });
+    const user = userEvent.setup();
+    renderWidget();
+
+    await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
+    const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
+    const actions = dialog.querySelector(".frog-detail-modal-actions");
+
+    expect(actions).not.toBeNull();
+    expect(actions?.children[0]).toHaveAttribute("aria-label", "Close");
+    expect(actions?.children[1]).toHaveAttribute("aria-label", "Add to favorites");
+    expect(actions?.children[2]).toHaveAttribute("aria-label", "Download PNG");
+
+    await user.click(within(dialog).getByRole("button", { name: "Add to favorites" }));
+
+    await waitFor(() => expect(within(dialog).getByRole("button", { name: "Remove from favorites" })).toBeInTheDocument());
+    expect(mockAddFavorite).toHaveBeenCalledWith("user-1", "ancient-cursed-frog");
+    expect(screen.getByRole("dialog", { name: "Ancient Cursed Frog" })).toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: "Remove from favorites" }));
+
+    await waitFor(() => expect(within(dialog).getByRole("button", { name: "Add to favorites" })).toBeInTheDocument());
+    expect(mockRemoveFavorite).toHaveBeenCalledWith("user-1", "ancient-cursed-frog");
   });
 });
