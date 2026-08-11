@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Download, Star, X } from "lucide-react";
 import { addFavorite, getFavoriteIds, removeFavorite } from "../../favorites.js";
 import { useAuthSessionBridge } from "./useAuthSessionBridge";
 import { parseFrogCatalog } from "./frogCatalog";
@@ -284,7 +285,7 @@ function FrogCard({
           aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
           onClick={() => onFavoriteToggle(frog.id)}
         >
-          {isFavorited ? "★" : "☆"}
+          <Star aria-hidden="true" size={20} fill={isFavorited ? "currentColor" : "none"} />
         </button>
       ) : null}
       <div className="frog-card-body">
@@ -389,7 +390,7 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
 
           <div className="frog-detail-modal-actions">
             <button ref={closeButton} className="modal-icon-button" type="button" aria-label="Close" onClick={onClose}>
-              <XIcon />
+              <X aria-hidden="true" size={20} />
             </button>
             {isAuthenticated ? (
               <button
@@ -400,31 +401,15 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
                 aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
                 onClick={() => onFavoriteToggle(frog.id)}
               >
-                <span aria-hidden="true">{isFavorited ? "★" : "☆"}</span>
+                <Star aria-hidden="true" size={20} fill={isFavorited ? "currentColor" : "none"} />
               </button>
             ) : null}
             <a className="modal-icon-button" href={imagePath} download={frog.file} aria-label="Download PNG">
-              <DownloadIcon />
+              <Download aria-hidden="true" size={20} />
             </a>
           </div>
         </div>
       </section>
     </div>
-  );
-}
-
-function XIcon() {
-  return (
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function DownloadIcon() {
-  return (
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <path d="M12 3v12m0 0 5-5m-5 5-5-5M5 21h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
   );
 }
