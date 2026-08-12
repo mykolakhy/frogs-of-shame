@@ -453,6 +453,35 @@ h1 {
   }
 }
 
+.frog-share-panel.is-closing {
+  animation-name: frog-share-panel-disappear;
+  pointer-events: none;
+}
+
+@keyframes frog-share-panel-disappear {
+  from {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px) scale(0.96);
+  }
+}
+
+@keyframes frog-share-panel-disappear-mobile {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+
 .frog-share-panel-header {
   display: flex;
   align-items: center;
@@ -952,6 +981,10 @@ h1 {
     top: calc(100% + 12px);
     right: 0;
     transform: none;
+  }
+
+  .frog-share-panel.is-closing {
+    animation-name: frog-share-panel-disappear-mobile;
   }
 }
 

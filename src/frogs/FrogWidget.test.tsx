@@ -266,7 +266,8 @@ describe("FrogWidget frog detail modal", () => {
 
     await user.click(within(sharePanel).getByRole("button", { name: "Close share panel" }));
 
-    expect(screen.queryByRole("dialog", { name: "Share this frog" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Share this frog" })).toHaveClass("is-closing");
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Share this frog" })).not.toBeInTheDocument());
     expect(within(dialog).getByRole("button", { name: "Share frog" })).toHaveFocus();
   });
 
@@ -306,7 +307,8 @@ describe("FrogWidget frog detail modal", () => {
     expect(screen.getByRole("dialog", { name: "Share this frog" })).toBeInTheDocument();
     fireEvent.pointerDown(document.body);
 
-    expect(screen.queryByRole("dialog", { name: "Share this frog" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Share this frog" })).toHaveClass("is-closing");
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Share this frog" })).not.toBeInTheDocument());
     expect(screen.getByRole("dialog", { name: "Ancient Cursed Frog" })).toBeInTheDocument();
   });
 

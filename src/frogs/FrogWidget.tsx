@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { type AnimationEvent, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Copy, Download, Share2, Star, X } from "lucide-react";
 import { addFavorite, getFavoriteIds, removeFavorite } from "../../favorites.js";
@@ -396,17 +396,45 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
   const imagePath = `./assets/frogs/${frog.file}`;
   const shareUrl = getFrogUrl(frog.id);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isShareMounted, setIsShareMounted] = useState(false);
+  const [isShareClosing, setIsShareClosing] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"idle" | "success" | "error">("idle");
+  const shareCloseTimer = useRef<number | null>(null);
   const browserNavigator = globalThis.navigator as Navigator & {
     share?: (data: { title: string; text: string; url: string }) => Promise<void>;
   };
   const canUseNativeShare = typeof browserNavigator.share === "function";
 
+  const openSharePanel = useCallback(() => {
+    if (shareCloseTimer.current !== null) {
+      window.clearTimeout(shareCloseTimer.current);
+      shareCloseTimer.current = null;
+    }
+
+    setIsShareMounted(true);
+    setIsShareClosing(false);
+    setIsShareOpen(true);
+  }, []);
+
   const closeSharePanel = useCallback(() => {
+    if (typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIsShareMounted(false);
+      setIsShareClosing(false);
+    } else {
+      setIsShareClosing(true);
+    }
+
     setIsShareOpen(false);
     setCopyStatus("idle");
     shareButton.current?.focus();
   }, []);
+
+  const handleSharePanelAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
+    if (isShareClosing && event.animationName.endsWith("disappear")) {
+      setIsShareMounted(false);
+      setIsShareClosing(false);
+    }
+  };
 
   const handleCopyLink = async () => {
     try {
@@ -515,9 +543,38 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
   }, [closeSharePanel, isShareOpen]);
 
   useEffect(() => {
+    if (!isShareMounted || isShareOpen || !isShareClosing) {
+      return;
+    }
+
+    shareCloseTimer.current = window.setTimeout(() => {
+      setIsShareMounted(false);
+      setIsShareClosing(false);
+      shareCloseTimer.current = null;
+    }, 200);
+
+    return () => {
+      if (shareCloseTimer.current !== null) {
+        window.clearTimeout(shareCloseTimer.current);
+        shareCloseTimer.current = null;
+      }
+    };
+  }, [isShareClosing, isShareMounted, isShareOpen]);
+
+  useEffect(() => {
+    setIsShareMounted(false);
+    setIsShareClosing(false);
     setIsShareOpen(false);
     setCopyStatus("idle");
   }, [frog.id]);
+
+  useEffect(() => {
+    return () => {
+      if (shareCloseTimer.current !== null) {
+        window.clearTimeout(shareCloseTimer.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -566,17 +623,18 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
               aria-label="Share frog"
               aria-expanded={isShareOpen}
               aria-controls={sharePanelId}
-              onClick={() => setIsShareOpen((open) => !open)}
+              onClick={isShareOpen ? closeSharePanel : openSharePanel}
             >
               <Share2 className="modal-share-icon" aria-hidden="true" size={20} />
             </button>
-            {isShareOpen ? (
+            {isShareMounted ? (
               <div
                 ref={sharePanel}
                 id={sharePanelId}
-                className="frog-share-panel"
+                className={`frog-share-panel${isShareClosing ? " is-closing" : ""}`}
                 role="dialog"
                 aria-labelledby={sharePanelTitleId}
+                onAnimationEnd={handleSharePanelAnimationEnd}
               >
                 <div className="frog-share-panel-header">
                   <h3 id={sharePanelTitleId}>Share this frog</h3>
