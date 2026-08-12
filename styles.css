@@ -312,6 +312,7 @@ h1 {
 }
 
 .frog-detail-modal {
+  position: relative;
   width: min(1000px, 100%);
   margin: 0 auto;
   transform: translateY(-24px);
@@ -411,6 +412,11 @@ h1 {
   cursor: wait;
   opacity: 0.6;
   transform: none;
+}
+
+.frog-share-anchor {
+  position: relative;
+  display: flex;
 }
 
 .frog-share-panel {
@@ -950,6 +956,14 @@ h1 {
     padding: 20px 12px;
   }
 
+  .frog-detail-modal-header {
+    padding-right: 56px;
+  }
+
+  .frog-detail-modal-header h2 {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+  }
+
   .frog-detail-modal-content {
     flex-direction: column;
   }
@@ -969,18 +983,33 @@ h1 {
   }
 
   .frog-detail-modal-actions {
-    position: relative;
+    position: static;
     width: auto;
     flex-direction: row;
-    align-self: flex-end;
+    align-self: center;
+    justify-content: center;
+    gap: 18px;
     padding-top: 0;
+  }
+
+  .frog-detail-modal-actions .modal-icon-button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .frog-detail-modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 
   .frog-share-panel {
     animation-name: frog-share-panel-appear-mobile;
-    top: calc(100% + 12px);
-    right: 0;
+    top: auto;
+    right: 50%;
+    bottom: calc(100% + 12px);
     transform: none;
+    translate: 50% 0;
   }
 
   .frog-share-panel.is-closing {

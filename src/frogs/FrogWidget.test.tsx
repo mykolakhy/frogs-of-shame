@@ -219,10 +219,10 @@ describe("FrogWidget frog detail modal", () => {
     const actions = dialog.querySelector(".frog-detail-modal-actions");
 
     expect(actions).not.toBeNull();
-    expect(actions?.children[0]).toHaveAttribute("aria-label", "Close");
-    expect(actions?.children[1]).toHaveAttribute("aria-label", "Add to favorites");
-    expect(actions?.children[2]).toHaveAttribute("aria-label", "Share frog");
-    expect(actions?.children[3]).toHaveAttribute("aria-label", "Download PNG");
+    expect(within(actions as HTMLElement).getByRole("button", { name: "Close" })).toHaveClass("frog-detail-modal-close");
+    expect(within(actions as HTMLElement).getByRole("button", { name: "Add to favorites" })).toBeInTheDocument();
+    expect(within(actions as HTMLElement).getByRole("button", { name: "Share frog" })).toBeInTheDocument();
+    expect(within(actions as HTMLElement).getByRole("link", { name: "Download PNG" })).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole("button", { name: "Add to favorites" }));
 

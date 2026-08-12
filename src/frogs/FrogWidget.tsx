@@ -601,7 +601,13 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
           </div>
 
           <div className="frog-detail-modal-actions">
-            <button ref={closeButton} className="modal-icon-button" type="button" aria-label="Close" onClick={onClose}>
+            <button
+              ref={closeButton}
+              className="modal-icon-button frog-detail-modal-close"
+              type="button"
+              aria-label="Close"
+              onClick={onClose}
+            >
               <X aria-hidden="true" size={20} />
             </button>
             {isAuthenticated ? (
@@ -616,49 +622,51 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
                 <Star aria-hidden="true" size={20} fill={isFavorited ? "currentColor" : "none"} />
               </button>
             ) : null}
-            <button
-              ref={shareButton}
-              className="modal-icon-button"
-              type="button"
-              aria-label="Share frog"
-              aria-expanded={isShareOpen}
-              aria-controls={sharePanelId}
-              onClick={isShareOpen ? closeSharePanel : openSharePanel}
-            >
-              <Share2 className="modal-share-icon" aria-hidden="true" size={20} />
-            </button>
-            {isShareMounted ? (
-              <div
-                ref={sharePanel}
-                id={sharePanelId}
-                className={`frog-share-panel${isShareClosing ? " is-closing" : ""}`}
-                role="dialog"
-                aria-labelledby={sharePanelTitleId}
-                onAnimationEnd={handleSharePanelAnimationEnd}
+            <div className="frog-share-anchor">
+              <button
+                ref={shareButton}
+                className="modal-icon-button"
+                type="button"
+                aria-label="Share frog"
+                aria-expanded={isShareOpen}
+                aria-controls={sharePanelId}
+                onClick={isShareOpen ? closeSharePanel : openSharePanel}
               >
-                <div className="frog-share-panel-header">
-                  <h3 id={sharePanelTitleId}>Share this frog</h3>
-                  <button className="share-panel-close" type="button" aria-label="Close share panel" onClick={closeSharePanel}>
-                    <X aria-hidden="true" size={16} />
+                <Share2 className="modal-share-icon" aria-hidden="true" size={20} />
+              </button>
+              {isShareMounted ? (
+                <div
+                  ref={sharePanel}
+                  id={sharePanelId}
+                  className={`frog-share-panel${isShareClosing ? " is-closing" : ""}`}
+                  role="dialog"
+                  aria-labelledby={sharePanelTitleId}
+                  onAnimationEnd={handleSharePanelAnimationEnd}
+                >
+                  <div className="frog-share-panel-header">
+                    <h3 id={sharePanelTitleId}>Share this frog</h3>
+                    <button className="share-panel-close" type="button" aria-label="Close share panel" onClick={closeSharePanel}>
+                      <X aria-hidden="true" size={16} />
+                    </button>
+                  </div>
+                  <button ref={copyLinkButton} className="share-panel-action" type="button" onClick={handleCopyLink}>
+                    {copyStatus === "success" ? <Check aria-hidden="true" size={18} /> : <Copy aria-hidden="true" size={18} />}
+                    Copy link
                   </button>
+                  {canUseNativeShare ? (
+                    <button className="share-panel-action" type="button" onClick={handleNativeShare}>
+                      <Share2 aria-hidden="true" size={18} />
+                      Share...
+                    </button>
+                  ) : null}
+                  {copyStatus !== "idle" ? (
+                    <p className="share-panel-status" role="status" aria-live="polite">
+                      {copyStatus === "success" ? "Link copied." : "Could not copy the link."}
+                    </p>
+                  ) : null}
                 </div>
-                <button ref={copyLinkButton} className="share-panel-action" type="button" onClick={handleCopyLink}>
-                  {copyStatus === "success" ? <Check aria-hidden="true" size={18} /> : <Copy aria-hidden="true" size={18} />}
-                  Copy link
-                </button>
-                {canUseNativeShare ? (
-                  <button className="share-panel-action" type="button" onClick={handleNativeShare}>
-                    <Share2 aria-hidden="true" size={18} />
-                    Share...
-                  </button>
-                ) : null}
-                {copyStatus !== "idle" ? (
-                  <p className="share-panel-status" role="status" aria-live="polite">
-                    {copyStatus === "success" ? "Link copied." : "Could not copy the link."}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
+              ) : null}
+            </div>
             <a className="modal-icon-button" href={imagePath} download={frog.file} aria-label="Download PNG">
               <Download aria-hidden="true" size={20} />
             </a>
