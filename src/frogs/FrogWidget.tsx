@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Download, Star, X } from "lucide-react";
+import { Check, Copy, Download, Share2, Star, X } from "lucide-react";
 import { addFavorite, getFavoriteIds, removeFavorite } from "../../favorites.js";
 import { useAuthSessionBridge } from "./useAuthSessionBridge";
 import { parseFrogCatalog } from "./frogCatalog";
@@ -14,6 +14,29 @@ type FavoriteMutationVariables = {
 type FavoriteMutationContext = {
   previousFavoriteIds: Set<string>;
 };
+
+const FROG_QUERY_PARAM = "frog";
+
+function getFrogIdFromUrl() {
+  return new URL(window.location.href).searchParams.get(FROG_QUERY_PARAM);
+}
+
+function getUrlWithoutFrogQuery() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete(FROG_QUERY_PARAM);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
+function getFrogUrl(frogId: string) {
+  const url = new URL(window.location.href);
+  url.searchParams.set(FROG_QUERY_PARAM, frogId);
+  return url.toString();
+}
+
+function getRelativeFrogUrl(frogId: string) {
+  const url = new URL(getFrogUrl(frogId));
+  return `${url.pathname}${url.search}${url.hash}`;
+}
 
 async function fetchFrogs(): Promise<Frog[]> {
   const response = await fetch("./assets/frogs.json");
@@ -113,6 +136,46 @@ export function FrogWidget() {
 
   const frogs = frogsQuery.data ?? [];
   const favoriteIds = favoriteIdsQuery.data ?? new Set<string>();
+
+  useEffect(() => {
+    if (frogsQuery.isPending || !frogsQuery.data || selectedFrog) {
+      return;
+    }
+
+    const frogId = getFrogIdFromUrl();
+    if (!frogId) {
+      return;
+    }
+
+    const deepLinkedFrog = frogsQuery.data.find((frog) => frog.id === frogId);
+    if (deepLinkedFrog) {
+      selectedFrogTrigger.current = null;
+      setSelectedFrog(deepLinkedFrog);
+      return;
+    }
+
+    window.history.replaceState(window.history.state, "", getUrlWithoutFrogQuery());
+  }, [frogsQuery.data, frogsQuery.isPending, selectedFrog]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const frogId = getFrogIdFromUrl();
+      const frog = frogs.find((candidate) => candidate.id === frogId);
+
+      if (frog) {
+        selectedFrogTrigger.current = null;
+        setSelectedFrog(frog);
+        return;
+      }
+
+      setSelectedFrog(null);
+      selectedFrogTrigger.current?.focus();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [frogs]);
+
   const filteredFrogs = useMemo(
     () => frogs.filter((frog) => matchesFrogQuery(frog, query) && (!showFavoritesOnly || favoriteIds.has(frog.id))),
     [favoriteIds, frogs, query, showFavoritesOnly],
@@ -133,10 +196,16 @@ export function FrogWidget() {
 
   const handleOpenDetails = useCallback((frog: Frog, trigger: HTMLButtonElement) => {
     selectedFrogTrigger.current = trigger;
+    window.history.pushState(
+      { ...window.history.state, frogModal: true, frogId: frog.id },
+      "",
+      getRelativeFrogUrl(frog.id),
+    );
     setSelectedFrog(frog);
   }, []);
 
   const handleCloseDetails = useCallback(() => {
+    window.history.replaceState(window.history.state, "", getUrlWithoutFrogQuery());
     setSelectedFrog(null);
     selectedFrogTrigger.current?.focus();
   }, []);
@@ -317,20 +386,75 @@ type FrogDetailModalProps = {
 
 function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavoriteToggle, onClose }: FrogDetailModalProps) {
   const closeButton = useRef<HTMLButtonElement>(null);
+  const shareButton = useRef<HTMLButtonElement>(null);
+  const copyLinkButton = useRef<HTMLButtonElement>(null);
+  const sharePanel = useRef<HTMLDivElement>(null);
   const modal = useRef<HTMLElement>(null);
   const titleId = useId();
+  const sharePanelId = useId();
+  const sharePanelTitleId = useId();
   const imagePath = `./assets/frogs/${frog.file}`;
+  const shareUrl = getFrogUrl(frog.id);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "success" | "error">("idle");
+  const browserNavigator = globalThis.navigator as Navigator & {
+    share?: (data: { title: string; text: string; url: string }) => Promise<void>;
+  };
+  const canUseNativeShare = typeof browserNavigator.share === "function";
+
+  const closeSharePanel = useCallback(() => {
+    setIsShareOpen(false);
+    setCopyStatus("idle");
+    shareButton.current?.focus();
+  }, []);
+
+  const handleCopyLink = async () => {
+    try {
+      if (!browserNavigator.clipboard?.writeText) {
+        throw new Error("Clipboard API is unavailable.");
+      }
+
+      await browserNavigator.clipboard.writeText(shareUrl);
+      setCopyStatus("success");
+    } catch (error) {
+      console.error(error);
+      setCopyStatus("error");
+    }
+  };
+
+  const handleNativeShare = async () => {
+    if (!browserNavigator.share) {
+      return;
+    }
+
+    try {
+      await browserNavigator.share({
+        title: frog.title,
+        text: `Check out ${frog.title}`,
+        url: shareUrl,
+      });
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        return;
+      }
+
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const previousBodyOverflow = document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
-    closeButton.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         event.preventDefault();
-        onClose();
+        if (isShareOpen) {
+          closeSharePanel();
+        } else {
+          onClose();
+        }
         return;
       }
 
@@ -362,7 +486,38 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
       document.body.style.overflow = previousBodyOverflow;
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [closeSharePanel, isShareOpen, onClose]);
+
+  useEffect(() => {
+    closeButton.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    if (isShareOpen) {
+      copyLinkButton.current?.focus();
+    }
+  }, [isShareOpen]);
+
+  useEffect(() => {
+    if (!isShareOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (target instanceof Node && !sharePanel.current?.contains(target) && !shareButton.current?.contains(target)) {
+        closeSharePanel();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [closeSharePanel, isShareOpen]);
+
+  useEffect(() => {
+    setIsShareOpen(false);
+    setCopyStatus("idle");
+  }, [frog.id]);
 
   return (
     <div
@@ -403,6 +558,48 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
               >
                 <Star aria-hidden="true" size={20} fill={isFavorited ? "currentColor" : "none"} />
               </button>
+            ) : null}
+            <button
+              ref={shareButton}
+              className="modal-icon-button"
+              type="button"
+              aria-label="Share frog"
+              aria-expanded={isShareOpen}
+              aria-controls={sharePanelId}
+              onClick={() => setIsShareOpen((open) => !open)}
+            >
+              <Share2 className="modal-share-icon" aria-hidden="true" size={20} />
+            </button>
+            {isShareOpen ? (
+              <div
+                ref={sharePanel}
+                id={sharePanelId}
+                className="frog-share-panel"
+                role="dialog"
+                aria-labelledby={sharePanelTitleId}
+              >
+                <div className="frog-share-panel-header">
+                  <h3 id={sharePanelTitleId}>Share this frog</h3>
+                  <button className="share-panel-close" type="button" aria-label="Close share panel" onClick={closeSharePanel}>
+                    <X aria-hidden="true" size={16} />
+                  </button>
+                </div>
+                <button ref={copyLinkButton} className="share-panel-action" type="button" onClick={handleCopyLink}>
+                  {copyStatus === "success" ? <Check aria-hidden="true" size={18} /> : <Copy aria-hidden="true" size={18} />}
+                  Copy link
+                </button>
+                {canUseNativeShare ? (
+                  <button className="share-panel-action" type="button" onClick={handleNativeShare}>
+                    <Share2 aria-hidden="true" size={18} />
+                    Share...
+                  </button>
+                ) : null}
+                {copyStatus !== "idle" ? (
+                  <p className="share-panel-status" role="status" aria-live="polite">
+                    {copyStatus === "success" ? "Link copied." : "Could not copy the link."}
+                  </p>
+                ) : null}
+              </div>
             ) : null}
             <a className="modal-icon-button" href={imagePath} download={frog.file} aria-label="Download PNG">
               <Download aria-hidden="true" size={20} />

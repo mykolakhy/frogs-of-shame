@@ -47,6 +47,7 @@ function renderWidget() {
 
 beforeEach(() => {
   state.session = null;
+  window.history.replaceState({}, "", "/");
   mockGetFavoriteIds.mockResolvedValue(new Set<string>());
   mockAddFavorite.mockResolvedValue(undefined);
   mockRemoveFavorite.mockResolvedValue(undefined);
@@ -61,6 +62,9 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  window.history.replaceState({}, "", "/");
+  Reflect.deleteProperty(navigator, "clipboard");
+  Reflect.deleteProperty(navigator, "share");
   vi.unstubAllGlobals();
   vi.clearAllMocks();
 });
@@ -110,6 +114,7 @@ describe("FrogWidget frog detail modal", () => {
     const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
 
     expect(dialog).toBeInTheDocument();
+    expect(window.location.search).toBe("?frog=ancient-cursed-frog");
     expect(within(dialog).getByRole("img", { name: "Ancient Cursed Frog" })).toHaveAttribute(
       "src",
       "./assets/frogs/ancient-cursed-frog.png",
@@ -133,6 +138,7 @@ describe("FrogWidget frog detail modal", () => {
     await user.click(screen.getByRole("button", { name: "Close" }));
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(window.location.search).toBe("");
     expect(trigger).toHaveFocus();
   });
 
@@ -143,9 +149,12 @@ describe("FrogWidget frog detail modal", () => {
     await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
     const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
     const close = within(dialog).getByRole("button", { name: "Close" });
+    const share = within(dialog).getByRole("button", { name: "Share frog" });
     const download = within(dialog).getByRole("link", { name: "Download PNG" });
 
     expect(close).toHaveFocus();
+    await user.tab();
+    expect(share).toHaveFocus();
     await user.tab();
     expect(download).toHaveFocus();
     await user.tab();
@@ -212,7 +221,8 @@ describe("FrogWidget frog detail modal", () => {
     expect(actions).not.toBeNull();
     expect(actions?.children[0]).toHaveAttribute("aria-label", "Close");
     expect(actions?.children[1]).toHaveAttribute("aria-label", "Add to favorites");
-    expect(actions?.children[2]).toHaveAttribute("aria-label", "Download PNG");
+    expect(actions?.children[2]).toHaveAttribute("aria-label", "Share frog");
+    expect(actions?.children[3]).toHaveAttribute("aria-label", "Download PNG");
 
     await user.click(within(dialog).getByRole("button", { name: "Add to favorites" }));
 
@@ -224,5 +234,112 @@ describe("FrogWidget frog detail modal", () => {
 
     await waitFor(() => expect(within(dialog).getByRole("button", { name: "Add to favorites" })).toBeInTheDocument());
     expect(mockRemoveFavorite).toHaveBeenCalledWith("user-1", "ancient-cursed-frog");
+  });
+
+  it("opens the share panel, copies the deep link, and restores focus on close", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const user = userEvent.setup();
+    Object.defineProperty(globalThis.navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+    expect((globalThis.navigator as Navigator & { clipboard?: { writeText: typeof writeText } }).clipboard?.writeText).toBe(
+      writeText,
+    );
+    renderWidget();
+
+    await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
+    const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
+    const share = within(dialog).getByRole("button", { name: "Share frog" });
+
+    await user.click(share);
+
+    const sharePanel = screen.getByRole("dialog", { name: "Share this frog" });
+    expect(sharePanel).toBeInTheDocument();
+    expect(within(sharePanel).queryByRole("button", { name: "Share..." })).not.toBeInTheDocument();
+    expect(within(sharePanel).getByRole("button", { name: "Copy link" })).toHaveFocus();
+
+    await user.click(within(sharePanel).getByRole("button", { name: "Copy link" }));
+
+    expect(writeText).toHaveBeenCalledWith(`${window.location.origin}/?frog=ancient-cursed-frog`);
+    expect(within(sharePanel).getByRole("status")).toHaveTextContent("Link copied.");
+
+    await user.click(within(sharePanel).getByRole("button", { name: "Close share panel" }));
+
+    expect(screen.queryByRole("dialog", { name: "Share this frog" })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Share frog" })).toHaveFocus();
+  });
+
+  it("uses the native share API with the frog deep link when supported", async () => {
+    const share = vi.fn().mockResolvedValue(undefined);
+    const mockedNavigator = Object.create(navigator);
+    Object.defineProperty(mockedNavigator, "share", {
+      configurable: true,
+      value: share,
+    });
+    vi.stubGlobal("navigator", mockedNavigator);
+    const user = userEvent.setup();
+    renderWidget();
+
+    await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
+    const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
+    await user.click(within(dialog).getByRole("button", { name: "Share frog" }));
+
+    const sharePanel = screen.getByRole("dialog", { name: "Share this frog" });
+    await user.click(within(sharePanel).getByRole("button", { name: "Share..." }));
+
+    expect(share).toHaveBeenCalledWith({
+      title: "Ancient Cursed Frog",
+      text: "Check out Ancient Cursed Frog",
+      url: `${window.location.origin}/?frog=ancient-cursed-frog`,
+    });
+  });
+
+  it("closes the share panel from an outside click without closing the frog modal", async () => {
+    const user = userEvent.setup();
+    renderWidget();
+
+    await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
+    const detailDialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
+    await user.click(within(detailDialog).getByRole("button", { name: "Share frog" }));
+
+    expect(screen.getByRole("dialog", { name: "Share this frog" })).toBeInTheDocument();
+    fireEvent.pointerDown(document.body);
+
+    expect(screen.queryByRole("dialog", { name: "Share this frog" })).not.toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "Ancient Cursed Frog" })).toBeInTheDocument();
+  });
+
+  it("opens the selected frog from a valid deep link", async () => {
+    window.history.replaceState({}, "", "/?frog=ancient-cursed-frog");
+    renderWidget();
+
+    const dialog = await screen.findByRole("dialog", { name: "Ancient Cursed Frog" });
+
+    expect(dialog).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Close" })).toHaveFocus();
+    expect(screen.queryByRole("button", { name: "Open details for Ancient Cursed Frog" })).not.toHaveFocus();
+  });
+
+  it("ignores an unknown frog deep link and keeps the catalog usable", async () => {
+    window.history.replaceState({}, "", "/?frog=missing-frog");
+    renderWidget();
+
+    expect(await screen.findByRole("heading", { name: "Ancient Cursed Frog" })).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(window.location.search).toBe("");
+  });
+
+  it("closes the modal and restores the URL when browser Back is used", async () => {
+    const user = userEvent.setup();
+    renderWidget();
+
+    await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
+    expect(window.location.search).toBe("?frog=ancient-cursed-frog");
+
+    window.history.back();
+
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(window.location.search).toBe("");
   });
 });
