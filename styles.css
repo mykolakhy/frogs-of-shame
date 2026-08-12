@@ -319,7 +319,7 @@ h1 {
 }
 
 .frog-detail-modal-header {
-  width: min(860px, 100%);
+  width: min(1000px, 100%);
   margin-bottom: 16px;
   margin-right: auto;
   margin-left: auto;
@@ -332,7 +332,7 @@ h1 {
 
 .frog-detail-modal-content {
   display: flex;
-  width: min(860px, 100%);
+  width: min(1000px, 100%);
   align-items: flex-start;
   justify-content: center;
   gap: 16px;
@@ -340,18 +340,129 @@ h1 {
   margin-left: auto;
 }
 
-.frog-detail-modal-image {
+.frog-detail-modal-workspace {
   display: flex;
   flex: 1;
   min-width: 0;
-  max-width: 800px;
   max-height: min(600px, calc(100vh - 230px));
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--input-bg);
+}
+
+.frog-detail-modal-image {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  max-width: 800px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--input-bg);
+}
+
+.frog-caption {
+  position: absolute;
+  right: 4%;
+  left: 4%;
+  z-index: 1;
+  margin: 0;
+  color: #fff8e8;
+  font-size: clamp(1.5rem, 4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.08;
+  text-align: center;
+  overflow-wrap: anywhere;
+  text-shadow:
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000,
+    0 3px 8px rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+}
+
+.frog-caption-top { top: 4%; }
+.frog-caption-bottom { bottom: 4%; }
+
+.frog-caption-editor {
+  display: flex;
+  width: 0;
+  align-self: stretch;
+  flex: 0 0 0;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 0;
+  border-left: 0 solid var(--line);
+  background: var(--panel);
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transform: translateX(24px);
+  visibility: hidden;
+  transition:
+    width 220ms ease,
+    flex-basis 220ms ease,
+    padding 220ms ease,
+    border-left-width 220ms ease,
+    opacity 160ms ease,
+    transform 220ms ease,
+    visibility 0s linear 220ms;
+}
+
+.frog-detail-modal-workspace.is-editor-open .frog-caption-editor {
+  width: 250px;
+  flex-basis: 250px;
+  padding: 22px 18px;
+  border-left-width: 1px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.frog-caption-editor label {
+  margin-top: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.frog-caption-editor label:first-child { margin-top: 0; }
+
+.frog-caption-editor input + label {
+  margin-top: 16px;
+}
+
+.frog-caption-editor input {
+  appearance: none;
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  min-height: 50px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #343734;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.25;
+  outline: none;
+}
+
+.frog-caption-editor input:focus-visible {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(141, 215, 255, 0.22);
+}
+
+.frog-caption-editor input::placeholder {
+  color: #8f958c;
+  font-size: 0.875rem;
+  opacity: 1;
 }
 
 .frog-detail-modal-image img {
@@ -968,6 +1079,39 @@ h1 {
     flex-direction: column;
   }
 
+  .frog-detail-modal-workspace {
+    width: 100%;
+    max-height: none;
+    flex-direction: column;
+  }
+
+  .frog-caption-editor {
+    width: 100%;
+    align-self: auto;
+    max-height: 0;
+    flex-basis: 0;
+    padding: 0 16px;
+    border-top: 0 solid var(--line);
+    border-left: 0;
+    transform: translateX(24px);
+    transition:
+      max-height 220ms ease,
+      padding 220ms ease,
+      border-top-width 220ms ease,
+      opacity 160ms ease,
+      transform 220ms ease,
+      visibility 0s linear 220ms;
+  }
+
+  .frog-detail-modal-workspace.is-editor-open .frog-caption-editor {
+    width: 100%;
+    max-height: 240px;
+    flex-basis: auto;
+    padding: 16px;
+    border-top-width: 1px;
+    border-left-width: 0;
+  }
+
   .frog-detail-modal-image {
     width: 100%;
     max-width: none;
@@ -1014,6 +1158,13 @@ h1 {
 
   .frog-share-panel.is-closing {
     animation-name: frog-share-panel-disappear-mobile;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frog-caption-editor,
+  .frog-detail-modal-workspace.is-editor-open .frog-caption-editor {
+    transition: none;
   }
 }
 

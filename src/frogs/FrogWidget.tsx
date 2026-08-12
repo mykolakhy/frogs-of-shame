@@ -1,6 +1,6 @@
 import { type AnimationEvent, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Copy, Download, Share2, Star, X } from "lucide-react";
+import { Check, Copy, Download, Pencil, Share2, Star, X } from "lucide-react";
 import { addFavorite, getFavoriteIds, removeFavorite } from "../../favorites.js";
 import { useAuthSessionBridge } from "./useAuthSessionBridge";
 import { parseFrogCatalog } from "./frogCatalog";
@@ -385,6 +385,10 @@ type FrogDetailModalProps = {
 };
 
 function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavoriteToggle, onClose }: FrogDetailModalProps) {
+  const [captionTop, setCaptionTop] = useState("");
+  const [captionBottom, setCaptionBottom] = useState("");
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const closeButton = useRef<HTMLButtonElement>(null);
   const shareButton = useRef<HTMLButtonElement>(null);
   const copyLinkButton = useRef<HTMLButtonElement>(null);
@@ -566,7 +570,83 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
     setIsShareClosing(false);
     setIsShareOpen(false);
     setCopyStatus("idle");
+    setCaptionTop("");
+    setCaptionBottom("");
+    setIsEditorOpen(false);
   }, [frog.id]);
+
+  const downloadEditedImage = async () => {
+    setIsDownloading(true);
+
+    try {
+      const image = new Image();
+      image.src = imagePath;
+      await image.decode();
+
+      const canvas = document.createElement("canvas");
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      const context = canvas.getContext("2d");
+
+      if (!context) {
+        throw new Error("Canvas is unavailable");
+      }
+
+      context.drawImage(image, 0, 0);
+      const fontSize = Math.max(28, Math.round(canvas.width * 0.065));
+      const lineHeight = fontSize * 1.08;
+      const horizontalPadding = Math.max(24, Math.round(canvas.width * 0.04));
+      const verticalPadding = Math.max(24, Math.round(canvas.height * 0.04));
+      context.font = `800 ${fontSize}px Inter, Arial, sans-serif`;
+      context.textAlign = "center";
+      context.lineJoin = "round";
+      context.fillStyle = "#fff8e8";
+      context.strokeStyle = "rgba(0, 0, 0, 0.9)";
+      context.lineWidth = Math.max(4, fontSize * 0.09);
+
+      const drawCaption = (caption: string, placement: "top" | "bottom") => {
+        const words = caption.trim().split(/\s+/).filter(Boolean);
+        const lines: string[] = [];
+        let currentLine = "";
+
+        for (const word of words) {
+          const nextLine = currentLine ? `${currentLine} ${word}` : word;
+          if (currentLine && context.measureText(nextLine).width > canvas.width - horizontalPadding * 2) {
+            lines.push(currentLine);
+            currentLine = word;
+          } else {
+            currentLine = nextLine;
+          }
+        }
+        if (currentLine) lines.push(currentLine);
+
+        const firstBaseline = placement === "top"
+          ? verticalPadding + fontSize
+          : canvas.height - verticalPadding - lineHeight * (lines.length - 1);
+
+        lines.forEach((line, index) => {
+          const y = firstBaseline + index * lineHeight;
+          context.strokeText(line, canvas.width / 2, y);
+          context.fillText(line, canvas.width / 2, y);
+        });
+      };
+
+      drawCaption(captionTop, "top");
+      drawCaption(captionBottom, "bottom");
+
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((result) => result ? resolve(result) : reject(new Error("Could not create PNG")), "image/png");
+      });
+      const downloadUrl = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = downloadUrl;
+      anchor.download = frog.file.replace(/\.png$/i, "-captioned.png");
+      anchor.click();
+      URL.revokeObjectURL(downloadUrl);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   useEffect(() => {
     return () => {
@@ -596,8 +676,33 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
         </header>
 
         <div className="frog-detail-modal-content">
-          <div className="frog-detail-modal-image">
-            <img src={imagePath} alt={frog.title} />
+          <div className={`frog-detail-modal-workspace${isEditorOpen ? " is-editor-open" : ""}`}>
+            <div className="frog-detail-modal-image">
+              <img src={imagePath} alt={frog.title} />
+              {captionTop ? <p className="frog-caption frog-caption-top">{captionTop}</p> : null}
+              {captionBottom ? <p className="frog-caption frog-caption-bottom">{captionBottom}</p> : null}
+            </div>
+
+            <div className="frog-caption-editor" aria-label="Caption editor" aria-hidden={!isEditorOpen}>
+              <label htmlFor={`${titleId}-caption-top`}>Caption top</label>
+              <input
+                id={`${titleId}-caption-top`}
+                type="text"
+                value={captionTop}
+                placeholder="Text of the caption top"
+                disabled={!isEditorOpen}
+                onChange={(event) => setCaptionTop(event.target.value)}
+              />
+              <label htmlFor={`${titleId}-caption-bottom`}>Caption bottom</label>
+              <input
+                id={`${titleId}-caption-bottom`}
+                type="text"
+                value={captionBottom}
+                placeholder="Text of the caption bottom"
+                disabled={!isEditorOpen}
+                onChange={(event) => setCaptionBottom(event.target.value)}
+              />
+            </div>
           </div>
 
           <div className="frog-detail-modal-actions">
@@ -622,6 +727,15 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
                 <Star aria-hidden="true" size={20} fill={isFavorited ? "currentColor" : "none"} />
               </button>
             ) : null}
+            <button
+              className="modal-icon-button"
+              type="button"
+              aria-label={isEditorOpen ? "Close caption editor" : "Open caption editor"}
+              aria-expanded={isEditorOpen}
+              onClick={() => setIsEditorOpen((isOpen) => !isOpen)}
+            >
+              <Pencil aria-hidden="true" size={20} />
+            </button>
             <div className="frog-share-anchor">
               <button
                 ref={shareButton}
@@ -667,9 +781,15 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
                 </div>
               ) : null}
             </div>
-            <a className="modal-icon-button" href={imagePath} download={frog.file} aria-label="Download PNG">
+            <button
+              className="modal-icon-button"
+              type="button"
+              aria-label="Download PNG"
+              disabled={isDownloading}
+              onClick={downloadEditedImage}
+            >
               <Download aria-hidden="true" size={20} />
-            </a>
+            </button>
           </div>
         </div>
       </section>

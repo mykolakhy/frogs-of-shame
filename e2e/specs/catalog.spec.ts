@@ -19,7 +19,7 @@ test.describe("frog catalog", () => {
     await expect(homePage.page.getByRole("button", { name: "Add to favorites" })).toBeHidden();
   });
 
-  test("guest can open frog details and download the original PNG", async ({ homePage }) => {
+  test("guest can edit captions and download a captioned PNG", async ({ homePage }) => {
     const frogTitle = "Amazon Milk Frog";
 
     await homePage.goto();
@@ -34,12 +34,17 @@ test.describe("frog catalog", () => {
     await expect(modal.getByRole("list", { name: `${frogTitle} tags` })).toContainText("amazon");
     await expect(homePage.catalog.detailShare(frogTitle)).toBeVisible();
 
-    const downloadLink = homePage.catalog.detailDownload(frogTitle);
-    await expect(downloadLink).toHaveAttribute("download", "amazon_milk_frog.png");
-    await expect(downloadLink).not.toHaveAttribute("target");
+    await modal.getByRole("button", { name: "Open caption editor" }).click();
+    await modal.getByRole("textbox", { name: "Caption top" }).fill("TOP FROG");
+    await modal.getByRole("textbox", { name: "Caption bottom" }).fill("BOTTOM FROG");
+    await expect(modal.locator(".frog-caption-top")).toHaveText("TOP FROG");
+    await expect(modal.locator(".frog-caption-bottom")).toHaveText("BOTTOM FROG");
 
-    const [download] = await Promise.all([homePage.page.waitForEvent("download"), downloadLink.click()]);
-    expect(download.suggestedFilename()).toBe("amazon_milk_frog.png");
+    const [download] = await Promise.all([
+      homePage.page.waitForEvent("download"),
+      homePage.catalog.detailDownload(frogTitle).click(),
+    ]);
+    expect(download.suggestedFilename()).toBe("amazon_milk_frog-captioned.png");
   });
 
   test("frog detail modal is horizontally centered with aligned content", async ({ homePage }) => {
@@ -102,12 +107,14 @@ test.describe("frog catalog", () => {
     const modal = homePage.catalog.detailModal(frogTitle);
     const header = modal.locator(".frog-detail-modal-header");
     const image = modal.locator(".frog-detail-modal-image");
+    const workspace = modal.locator(".frog-detail-modal-workspace");
     const actions = modal.locator(".frog-detail-modal-actions");
     const close = homePage.catalog.detailClose(frogTitle);
     const share = homePage.catalog.detailShare(frogTitle);
-    const [headerBox, imageBox, actionsBox, closeBox, shareBox] = await Promise.all([
+    const [headerBox, imageBox, workspaceBox, actionsBox, closeBox, shareBox] = await Promise.all([
       header.boundingBox(),
       image.boundingBox(),
+      workspace.boundingBox(),
       actions.boundingBox(),
       close.boundingBox(),
       share.boundingBox(),
@@ -115,6 +122,7 @@ test.describe("frog catalog", () => {
 
     expect(headerBox).not.toBeNull();
     expect(imageBox).not.toBeNull();
+    expect(workspaceBox).not.toBeNull();
     expect(actionsBox).not.toBeNull();
     expect(closeBox).not.toBeNull();
     expect(shareBox).not.toBeNull();
@@ -128,7 +136,7 @@ test.describe("frog catalog", () => {
     const panelBox = await homePage.catalog.sharePanel().boundingBox();
     expect(panelBox).not.toBeNull();
     expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(shareBox!.y);
-    expect(panelBox!.y).toBeLessThan(imageBox!.y + imageBox!.height);
+    expect(panelBox!.y).toBeLessThan(workspaceBox!.y + workspaceBox!.height);
   });
 
   test("valid frog deep link opens the matching modal and Back closes it", async ({ homePage }) => {
