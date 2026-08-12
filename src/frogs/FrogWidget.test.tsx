@@ -123,10 +123,28 @@ describe("FrogWidget frog detail modal", () => {
     expect(within(dialog).getByRole("button", { name: "Close" })).toHaveFocus();
     expect(within(dialog).queryByRole("button", { name: "Add to favorites" })).not.toBeInTheDocument();
 
-    const download = within(dialog).getByRole("link", { name: "Download PNG" });
-    expect(download).toHaveAttribute("href", "./assets/frogs/ancient-cursed-frog.png");
-    expect(download).toHaveAttribute("download", "ancient-cursed-frog.png");
-    expect(download).not.toHaveAttribute("target");
+    expect(within(dialog).queryByRole("textbox", { name: "Caption top" })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Open caption editor" })).toHaveAttribute("aria-expanded", "false");
+    expect(within(dialog).getByRole("button", { name: "Download PNG" })).toBeInTheDocument();
+  });
+
+  it("toggles the caption editor and preserves entered captions", async () => {
+    const user = userEvent.setup();
+    renderWidget();
+
+    await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
+    const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
+    await user.click(within(dialog).getByRole("button", { name: "Open caption editor" }));
+
+    const captionTop = within(dialog).getByRole("textbox", { name: "Caption top" });
+    await user.type(captionTop, "A patient frog");
+    expect(within(dialog).getByText("A patient frog")).toHaveClass("frog-caption-top");
+
+    await user.click(within(dialog).getByRole("button", { name: "Close caption editor" }));
+    expect(within(dialog).queryByRole("textbox", { name: "Caption top" })).not.toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole("button", { name: "Open caption editor" }));
+    expect(within(dialog).getByRole("textbox", { name: "Caption top" })).toHaveValue("A patient frog");
   });
 
   it("closes from the close control and restores focus to the originating card", async () => {
@@ -149,10 +167,13 @@ describe("FrogWidget frog detail modal", () => {
     await user.click(await screen.findByRole("button", { name: "Open details for Ancient Cursed Frog" }));
     const dialog = screen.getByRole("dialog", { name: "Ancient Cursed Frog" });
     const close = within(dialog).getByRole("button", { name: "Close" });
+    const editor = within(dialog).getByRole("button", { name: "Open caption editor" });
     const share = within(dialog).getByRole("button", { name: "Share frog" });
-    const download = within(dialog).getByRole("link", { name: "Download PNG" });
+    const download = within(dialog).getByRole("button", { name: "Download PNG" });
 
     expect(close).toHaveFocus();
+    await user.tab();
+    expect(editor).toHaveFocus();
     await user.tab();
     expect(share).toHaveFocus();
     await user.tab();
@@ -221,8 +242,9 @@ describe("FrogWidget frog detail modal", () => {
     expect(actions).not.toBeNull();
     expect(within(actions as HTMLElement).getByRole("button", { name: "Close" })).toHaveClass("frog-detail-modal-close");
     expect(within(actions as HTMLElement).getByRole("button", { name: "Add to favorites" })).toBeInTheDocument();
+    expect(within(actions as HTMLElement).getByRole("button", { name: "Open caption editor" })).toBeInTheDocument();
     expect(within(actions as HTMLElement).getByRole("button", { name: "Share frog" })).toBeInTheDocument();
-    expect(within(actions as HTMLElement).getByRole("link", { name: "Download PNG" })).toBeInTheDocument();
+    expect(within(actions as HTMLElement).getByRole("button", { name: "Download PNG" })).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole("button", { name: "Add to favorites" }));
 

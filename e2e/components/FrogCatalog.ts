@@ -50,7 +50,7 @@ export class FrogCatalog {
   }
 
   detailDownload(title: string) {
-    return this.detailModal(title).getByRole("link", { name: "Download PNG" });
+    return this.detailModal(title).getByRole("button", { name: "Download PNG" });
   }
 
   detailClose(title: string) {
