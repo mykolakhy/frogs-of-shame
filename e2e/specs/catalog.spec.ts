@@ -93,6 +93,44 @@ test.describe("frog catalog", () => {
     await expect(homePage.page).toHaveURL(/\?frog=amazon-milk$/);
   });
 
+  test("mobile modal keeps Close in the header and overlays Share above the action row", async ({ homePage }) => {
+    const frogTitle = "Amazon Milk Frog";
+    await homePage.page.setViewportSize({ width: 390, height: 844 });
+    await homePage.goto();
+    await homePage.catalog.openDetails(frogTitle);
+
+    const modal = homePage.catalog.detailModal(frogTitle);
+    const header = modal.locator(".frog-detail-modal-header");
+    const image = modal.locator(".frog-detail-modal-image");
+    const actions = modal.locator(".frog-detail-modal-actions");
+    const close = homePage.catalog.detailClose(frogTitle);
+    const share = homePage.catalog.detailShare(frogTitle);
+    const [headerBox, imageBox, actionsBox, closeBox, shareBox] = await Promise.all([
+      header.boundingBox(),
+      image.boundingBox(),
+      actions.boundingBox(),
+      close.boundingBox(),
+      share.boundingBox(),
+    ]);
+
+    expect(headerBox).not.toBeNull();
+    expect(imageBox).not.toBeNull();
+    expect(actionsBox).not.toBeNull();
+    expect(closeBox).not.toBeNull();
+    expect(shareBox).not.toBeNull();
+    expect(closeBox!.y).toBeLessThan(imageBox!.y);
+    expect(closeBox!.x).toBeGreaterThan(headerBox!.x + headerBox!.width / 2);
+    expect(actionsBox!.y).toBeGreaterThanOrEqual(imageBox!.y + imageBox!.height);
+    expect(closeBox!.width).toBeGreaterThanOrEqual(44);
+    expect(shareBox!.width).toBeGreaterThanOrEqual(44);
+
+    await share.click();
+    const panelBox = await homePage.catalog.sharePanel().boundingBox();
+    expect(panelBox).not.toBeNull();
+    expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(shareBox!.y);
+    expect(panelBox!.y).toBeLessThan(imageBox!.y + imageBox!.height);
+  });
+
   test("valid frog deep link opens the matching modal and Back closes it", async ({ homePage }) => {
     await homePage.page.goto("/?frog=amazon-milk");
     await homePage.catalog.waitUntilLoaded();
