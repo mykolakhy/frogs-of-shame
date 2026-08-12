@@ -665,7 +665,13 @@ function FrogDetailModal({ frog, isAuthenticated, isFavorited, isPending, onFavo
         }
       }}
     >
-      <section ref={modal} className="frog-detail-modal" role="dialog" aria-modal="true" aria-labelledby={titleId}>
+      <section
+        ref={modal}
+        className={`frog-detail-modal${isEditorOpen ? " is-editor-open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
         <header className="frog-detail-modal-header">
           <h2 id={titleId}>{frog.title}</h2>
           <ul className="tag-list" aria-label={`${frog.title} tags`}>
