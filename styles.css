@@ -363,6 +363,7 @@ h1 {
 }
 
 .frog-detail-modal-actions {
+  position: relative;
   display: flex;
   width: 44px;
   flex-direction: column;
@@ -377,6 +378,7 @@ h1 {
   height: 34px;
   align-items: center;
   justify-content: center;
+  padding: 0;
   border: 1px solid var(--line);
   border-radius: 50%;
   background: var(--scrim-strong);
@@ -387,6 +389,10 @@ h1 {
     border-color 160ms ease,
     background 160ms ease,
     transform 160ms ease;
+}
+
+.modal-share-icon {
+  transform: translate(-1px, -0px);
 }
 
 .modal-icon-button:hover {
@@ -405,6 +411,146 @@ h1 {
   cursor: wait;
   opacity: 0.6;
   transform: none;
+}
+
+.frog-share-panel {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 12px);
+  z-index: 2;
+  width: 220px;
+  max-width: calc(100vw - 24px);
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--scrim-strong);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+  animation: frog-share-panel-appear 160ms ease-out both;
+  transform: translateY(-50%);
+}
+
+@keyframes frog-share-panel-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+}
+
+@keyframes frog-share-panel-appear-mobile {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.frog-share-panel.is-closing {
+  animation-name: frog-share-panel-disappear;
+  pointer-events: none;
+}
+
+@keyframes frog-share-panel-disappear {
+  from {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-50%) translateX(6px) scale(0.96);
+  }
+}
+
+@keyframes frog-share-panel-disappear-mobile {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+}
+
+.frog-share-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.frog-share-panel-header h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.share-panel-close {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.share-panel-close:hover {
+  border-color: var(--line);
+  color: var(--accent-strong);
+}
+
+.share-panel-close:focus-visible {
+  border-color: var(--focus);
+  outline: none;
+}
+
+.share-panel-action {
+  display: flex;
+  width: 100%;
+  min-height: 36px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 9px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.share-panel-action:hover {
+  border-color: var(--line);
+  background: rgba(5, 7, 4, 0.5);
+  color: var(--accent-strong);
+}
+
+.share-panel-action:focus-visible {
+  border-color: var(--focus);
+  outline: none;
+}
+
+.share-panel-status {
+  margin: 9px 2px 0;
+  color: var(--accent-strong);
+  font-size: 0.8rem;
 }
 
 .empty-state {
@@ -823,9 +969,27 @@ h1 {
   }
 
   .frog-detail-modal-actions {
+    position: relative;
     width: auto;
     flex-direction: row;
     align-self: flex-end;
     padding-top: 0;
+  }
+
+  .frog-share-panel {
+    animation-name: frog-share-panel-appear-mobile;
+    top: calc(100% + 12px);
+    right: 0;
+    transform: none;
+  }
+
+  .frog-share-panel.is-closing {
+    animation-name: frog-share-panel-disappear-mobile;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frog-share-panel {
+    animation: none;
   }
 }

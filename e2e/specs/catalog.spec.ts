@@ -32,6 +32,7 @@ test.describe("frog catalog", () => {
       "./assets/frogs/amazon_milk_frog.png",
     );
     await expect(modal.getByRole("list", { name: `${frogTitle} tags` })).toContainText("amazon");
+    await expect(homePage.catalog.detailShare(frogTitle)).toBeVisible();
 
     const downloadLink = homePage.catalog.detailDownload(frogTitle);
     await expect(downloadLink).toHaveAttribute("download", "amazon_milk_frog.png");
@@ -74,6 +75,36 @@ test.describe("frog catalog", () => {
     expect(Math.abs(headerBox!.x - imageFrameBox!.x)).toBeLessThanOrEqual(1);
     expect(Math.abs((imageBox!.x + imageBox!.width / 2) - (imageFrameBox!.x + imageFrameBox!.width / 2))).toBeLessThanOrEqual(1);
     expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(actionsBox!.x);
+  });
+
+  test("guest can open the share panel and copy the frog deep link", async ({ homePage }) => {
+    const frogTitle = "Amazon Milk Frog";
+
+    await homePage.goto();
+    await homePage.catalog.openDetails(frogTitle);
+    await homePage.catalog.detailShare(frogTitle).click();
+
+    await expect(homePage.catalog.sharePanel()).toBeVisible();
+    await homePage.page.context().grantPermissions(["clipboard-read", "clipboard-write"], {
+      origin: new URL(homePage.page.url()).origin,
+    });
+    await homePage.catalog.shareCopyLink().click();
+    await expect(homePage.catalog.sharePanel().getByRole("status")).toHaveText("Link copied.");
+    await expect(homePage.page).toHaveURL(/\?frog=amazon-milk$/);
+  });
+
+  test("valid frog deep link opens the matching modal and Back closes it", async ({ homePage }) => {
+    await homePage.page.goto("/?frog=amazon-milk");
+    await homePage.catalog.waitUntilLoaded();
+
+    await expect(homePage.catalog.detailModal("Amazon Milk Frog")).toBeVisible();
+    await expect(homePage.page).toHaveURL(/\?frog=amazon-milk$/);
+
+    await homePage.goto();
+    await homePage.catalog.openDetails("Amazon Milk Frog");
+    await homePage.page.goBack();
+    await expect(homePage.catalog.detailModal("Amazon Milk Frog")).toBeHidden();
+    await expect(homePage.page).toHaveURL(/\/$/);
   });
 
   test("frog detail modal closes with its button, Escape, and backdrop", async ({ homePage }) => {

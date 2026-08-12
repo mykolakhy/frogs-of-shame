@@ -56,4 +56,16 @@ export class FrogCatalog {
   detailClose(title: string) {
     return this.detailModal(title).getByRole("button", { name: "Close" });
   }
+
+  detailShare(title: string) {
+    return this.detailModal(title).getByRole("button", { name: "Share frog" });
+  }
+
+  sharePanel() {
+    return this.page.getByRole("dialog", { name: "Share this frog" });
+  }
+
+  shareCopyLink() {
+    return this.sharePanel().getByRole("button", { name: "Copy link" });
+  }
 }
