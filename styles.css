@@ -319,7 +319,7 @@ h1 {
 }
 
 .frog-detail-modal-header {
-  width: min(1000px, 100%);
+  width: min(860px, 100%);
   margin-bottom: 16px;
   margin-right: auto;
   margin-left: auto;
@@ -332,12 +332,18 @@ h1 {
 
 .frog-detail-modal-content {
   display: flex;
-  width: min(1000px, 100%);
+  width: min(860px, 100%);
   align-items: flex-start;
   justify-content: center;
   gap: 16px;
   margin-right: auto;
   margin-left: auto;
+  transition: width 220ms ease;
+}
+
+.frog-detail-modal.is-editor-open .frog-detail-modal-header,
+.frog-detail-modal.is-editor-open .frog-detail-modal-content {
+  width: min(1000px, 100%);
 }
 
 .frog-detail-modal-workspace {
@@ -356,7 +362,7 @@ h1 {
   display: flex;
   flex: 1;
   min-width: 0;
-  max-width: 800px;
+  max-width: none;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -1162,6 +1168,7 @@ h1 {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .frog-detail-modal-content,
   .frog-caption-editor,
   .frog-detail-modal-workspace.is-editor-open .frog-caption-editor {
     transition: none;

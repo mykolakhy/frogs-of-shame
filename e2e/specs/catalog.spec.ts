@@ -56,6 +56,7 @@ test.describe("frog catalog", () => {
     const modal = homePage.catalog.detailModal(frogTitle);
     const content = modal.locator(".frog-detail-modal-content");
     const header = modal.locator(".frog-detail-modal-header");
+    const workspace = modal.locator(".frog-detail-modal-workspace");
     const imageFrame = modal.locator(".frog-detail-modal-image");
     const image = homePage.catalog.detailImage(frogTitle);
     const actions = modal.locator(".frog-detail-modal-actions");
@@ -63,6 +64,7 @@ test.describe("frog catalog", () => {
     const modalBox = await modal.boundingBox();
     const contentBox = await content.boundingBox();
     const headerBox = await header.boundingBox();
+    const workspaceBox = await workspace.boundingBox();
     const imageFrameBox = await imageFrame.boundingBox();
     const imageBox = await image.boundingBox();
     const actionsBox = await actions.boundingBox();
@@ -71,6 +73,7 @@ test.describe("frog catalog", () => {
     expect(modalBox).not.toBeNull();
     expect(contentBox).not.toBeNull();
     expect(headerBox).not.toBeNull();
+    expect(workspaceBox).not.toBeNull();
     expect(imageFrameBox).not.toBeNull();
     expect(imageBox).not.toBeNull();
     expect(actionsBox).not.toBeNull();
@@ -78,6 +81,7 @@ test.describe("frog catalog", () => {
     expect(Math.abs((modalBox!.x + modalBox!.width / 2) - viewport!.width / 2)).toBeLessThanOrEqual(1);
     expect(Math.abs((contentBox!.x + contentBox!.width / 2) - viewport!.width / 2)).toBeLessThanOrEqual(1);
     expect(Math.abs(headerBox!.x - imageFrameBox!.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(imageFrameBox!.x + imageFrameBox!.width - (workspaceBox!.x + workspaceBox!.width))).toBeLessThanOrEqual(1);
     expect(Math.abs((imageBox!.x + imageBox!.width / 2) - (imageFrameBox!.x + imageFrameBox!.width / 2))).toBeLessThanOrEqual(1);
     expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(actionsBox!.x);
   });
